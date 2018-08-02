@@ -1,6 +1,6 @@
 # VattenMedia
 
-A desktop client for starting Twitch streams using a third party stream utility.
+A desktop client for watching Twitch streams using a third party streaming utility.
 
 The software is designed to be used together with `livestreamer` and the media player of your choice.
 

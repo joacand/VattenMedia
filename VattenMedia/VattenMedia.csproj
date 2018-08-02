@@ -60,20 +60,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\TwitchChannel.cs" />
-    <Compile Include="VattenMediaForm.cs">
+    <Compile Include="UI\VattenMediaForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="VattenMediaForm.Designer.cs">
+    <Compile Include="UI\VattenMediaForm.Designer.cs">
       <DependentUpon>VattenMediaForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\StatusManager.cs" />
     <Compile Include="Infrastructure\IStatusManager.cs" />
     <Compile Include="Infrastructure\IStreamService.cs" />
     <Compile Include="Infrastructure\StreamService.cs" />
-    <Compile Include="OAuthWindow.cs">
+    <Compile Include="UI\OAuthWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OAuthWindow.Designer.cs">
+    <Compile Include="UI\OAuthWindow.Designer.cs">
       <DependentUpon>OAuthWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -85,10 +85,10 @@
     <Compile Include="Infrastructure\IConfigHandler.cs" />
     <Compile Include="Infrastructure\ITwitchService.cs" />
     <Compile Include="Infrastructure\TwitchService.cs" />
-    <EmbeddedResource Include="VattenMediaForm.resx">
+    <EmbeddedResource Include="UI\VattenMediaForm.resx">
       <DependentUpon>VattenMediaForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OAuthWindow.resx">
+    <EmbeddedResource Include="UI\OAuthWindow.resx">
       <DependentUpon>OAuthWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
