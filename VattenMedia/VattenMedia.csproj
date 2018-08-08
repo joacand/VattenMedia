@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>pop32.ico</ApplicationIcon>
+    <ApplicationIcon>vattenmedia8.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>VattenMedia.Program</StartupObject>
@@ -118,7 +118,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="pop32.ico" />
+    <Content Include="vattenmedia8.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
