@@ -13,5 +13,5 @@ The software is designed to be used together with `livestreamer` and the media p
 
 ## Screenshot
 
-Here is an example of how it looks like:_
+Here is an example of how it looks like:
 ![alt tag](https://i.imgur.com/2sbVemF.png "Example usage of the application")
