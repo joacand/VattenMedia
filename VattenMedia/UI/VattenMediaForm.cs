@@ -278,11 +278,6 @@ namespace VattenMedia
         private void LaunchChannelButton_Click(object sender, EventArgs e)
         {
             string url = textBox_URL.Text;
-            if (!url.Contains("twitch.tv"))
-            {
-                ChangeStatusText("Invalid URL - Should be formatted as: http://www.twitch.tv/channel");
-                return;
-            }
             if (url.Equals("http://www.twitch.tv/channel")) // Initial example text - ignore
             {
                 return;

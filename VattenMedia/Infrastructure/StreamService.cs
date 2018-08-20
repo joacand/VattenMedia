@@ -18,8 +18,8 @@ namespace VattenMedia.Infrastructure
 
         public void StartStream(Uri url, List<string> qualityOptions)
         {
-            string process = Properties.Settings.Default.LivestreamerPath;
-            string args = $@" {url} {String.Join(",", qualityOptions)} --config {Properties.Settings.Default.LivestreamerRcPath}";
+            string process = Properties.Settings.Default.StreamUtilityPath;
+            string args = $@" {url} {String.Join(",", qualityOptions)} --config {Properties.Settings.Default.StreamUtilityRcPath}";
             StartProcess(process, args);
         }
 

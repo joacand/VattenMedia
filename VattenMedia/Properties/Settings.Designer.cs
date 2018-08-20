@@ -12,7 +12,7 @@ namespace VattenMedia.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.8.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -46,22 +46,22 @@ namespace VattenMedia.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("ThirdParty/livestreamer/livestreamer.exe")]
-        public string LivestreamerPath {
+        [global::System.Configuration.DefaultSettingValueAttribute("ThirdParty/StreamUtility/Streamlink.exe")]
+        public string StreamUtilityPath {
             get {
-                return ((string)(this["LivestreamerPath"]));
+                return ((string)(this["StreamUtilityPath"]));
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("ThirdParty/vattenmediarc")]
-        public string LivestreamerRcPath {
+        public string StreamUtilityRcPath {
             get {
-                return ((string)(this["LivestreamerRcPath"]));
+                return ((string)(this["StreamUtilityRcPath"]));
             }
             set {
-                this["LivestreamerRcPath"] = value;
+                this["StreamUtilityRcPath"] = value;
             }
         }
     }

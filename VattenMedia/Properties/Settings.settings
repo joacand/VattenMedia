@@ -8,10 +8,10 @@
     <Setting Name="TwitchApiUrl" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://api.twitch.tv/</Value>
     </Setting>
-    <Setting Name="LivestreamerPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">ThirdParty/livestreamer/livestreamer.exe</Value>
+    <Setting Name="StreamUtilityPath" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ThirdParty/StreamUtility/Streamlink.exe</Value>
     </Setting>
-    <Setting Name="LivestreamerRcPath" Type="System.String" Scope="User">
+    <Setting Name="StreamUtilityRcPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">ThirdParty/vattenmediarc</Value>
     </Setting>
   </Settings>

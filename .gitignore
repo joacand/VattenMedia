@@ -322,5 +322,5 @@ ASALocalRun/
 *.binlog
 
 # VattenMedia specific
-*/ThirdParty/livestreamer/*
-!*/ThirdParty/livestreamer/README.md
+*/ThirdParty/StreamUtility/*
+!*/ThirdParty/StreamUtility/README.md
