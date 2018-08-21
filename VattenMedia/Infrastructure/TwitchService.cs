@@ -58,5 +58,14 @@ namespace VattenMedia.Infrastructure
 
             return liveChannels;
         }
+
+        public string GetAuthIdFromUrl(string url)
+        {
+            if (url.Contains("access_token"))
+            {
+                return url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
+            }
+            return null;
+        }
     }
 }

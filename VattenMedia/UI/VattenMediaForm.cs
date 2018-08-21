@@ -130,8 +130,8 @@ namespace VattenMedia
 
         private void OAuth(IStreamingService streamingService)
         {
-            OAuthWindow oAuth = new OAuthWindow();
-            oAuth.Go(streamingService);
+            OAuthWindow oAuth = new OAuthWindow(streamingService);
+            oAuth.Go();
             configHandler.SetAccessToken(oAuth.AuthId);
             Reset();
             ListChannels();

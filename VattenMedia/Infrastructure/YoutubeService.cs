@@ -15,5 +15,10 @@ namespace VattenMedia.Infrastructure
         {
             throw new NotImplementedException();
         }
+
+        public string GetAuthIdFromUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

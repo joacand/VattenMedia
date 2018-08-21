@@ -8,5 +8,6 @@ namespace VattenMedia.Infrastructure
     {
         string OAuthUrl { get; }
         Task<List<LiveChannel>> GetLiveChannels(string oAuthId);
+        string GetAuthIdFromUrl(string url);
     }
 }

@@ -1,21 +1,22 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using VattenMedia.Infrastructure;
 
 namespace VattenMedia
 {
     public partial class OAuthWindow : Form
     {
+        private IStreamingService streamingService;
         public string AuthId { get; private set; } = "";
 
-        public OAuthWindow()
+        public OAuthWindow(IStreamingService streamingService)
         {
+            this.streamingService = streamingService;
             InitializeComponent();
         }
 
-        public DialogResult Go(IStreamingService twitch)
+        public DialogResult Go()
         {
-            OAuthWebBrowser.Navigate(twitch.OAuthUrl);
+            OAuthWebBrowser.Navigate(streamingService.OAuthUrl);
             DialogResult dialogResult = ShowDialog();
             return dialogResult;
         }
@@ -23,10 +24,10 @@ namespace VattenMedia
         private void OAuthWebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             string url = e.Url.ToString();
+            AuthId = streamingService.GetAuthIdFromUrl(url);
 
-            if (url.Contains("access_token"))
+            if (!string.IsNullOrWhiteSpace(AuthId))
             {
-                AuthId = url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
                 DialogResult = DialogResult.Yes;
             }
         }
