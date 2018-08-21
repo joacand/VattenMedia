@@ -32,7 +32,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VattenMediaForm));
-            this.OAuthButton = new System.Windows.Forms.Button();
+            this.OAuthTwitchButton = new System.Windows.Forms.Button();
             this.RefreshChannelsButton = new System.Windows.Forms.Button();
             this.OAuthAvailableLabel = new System.Windows.Forms.Label();
             this.ChannelGridView = new System.Windows.Forms.DataGridView();
@@ -44,20 +44,21 @@
             this.RadioQualityLow = new System.Windows.Forms.RadioButton();
             this.LaunchChannelButton = new System.Windows.Forms.Button();
             this.textBox_URL = new System.Windows.Forms.TextBox();
+            this.OAuthYoutubeButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ChannelGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // OAuthButton
+            // OAuthTwitchButton
             // 
-            this.OAuthButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OAuthButton.Location = new System.Drawing.Point(969, 542);
-            this.OAuthButton.Name = "OAuthButton";
-            this.OAuthButton.Size = new System.Drawing.Size(75, 23);
-            this.OAuthButton.TabIndex = 0;
-            this.OAuthButton.Text = "OAuth";
-            this.OAuthButton.UseVisualStyleBackColor = true;
-            this.OAuthButton.Click += new System.EventHandler(this.OAuthButton_Click);
+            this.OAuthTwitchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.OAuthTwitchButton.Location = new System.Drawing.Point(871, 540);
+            this.OAuthTwitchButton.Name = "OAuthTwitchButton";
+            this.OAuthTwitchButton.Size = new System.Drawing.Size(81, 23);
+            this.OAuthTwitchButton.TabIndex = 0;
+            this.OAuthTwitchButton.Text = "OAuth Twitch";
+            this.OAuthTwitchButton.UseVisualStyleBackColor = true;
+            this.OAuthTwitchButton.Click += new System.EventHandler(this.OAuthTwitchButton_Click);
             // 
             // RefreshChannelsButton
             // 
@@ -76,7 +77,7 @@
             this.OAuthAvailableLabel.AutoSize = true;
             this.OAuthAvailableLabel.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OAuthAvailableLabel.ForeColor = System.Drawing.Color.Red;
-            this.OAuthAvailableLabel.Location = new System.Drawing.Point(854, 546);
+            this.OAuthAvailableLabel.Location = new System.Drawing.Point(756, 544);
             this.OAuthAvailableLabel.Name = "OAuthAvailableLabel";
             this.OAuthAvailableLabel.Size = new System.Drawing.Size(109, 15);
             this.OAuthAvailableLabel.TabIndex = 3;
@@ -214,11 +215,23 @@
             this.textBox_URL.TabIndex = 11;
             this.textBox_URL.Text = "http://www.twitch.tv/channel";
             // 
+            // OAuthYoutubeButton
+            // 
+            this.OAuthYoutubeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.OAuthYoutubeButton.Location = new System.Drawing.Point(958, 540);
+            this.OAuthYoutubeButton.Name = "OAuthYoutubeButton";
+            this.OAuthYoutubeButton.Size = new System.Drawing.Size(93, 23);
+            this.OAuthYoutubeButton.TabIndex = 12;
+            this.OAuthYoutubeButton.Text = "OAuth Youtube";
+            this.OAuthYoutubeButton.UseVisualStyleBackColor = true;
+            this.OAuthYoutubeButton.Click += new System.EventHandler(this.OAuthYoutubeButton_Click);
+            // 
             // VattenMediaForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1056, 590);
+            this.Controls.Add(this.OAuthYoutubeButton);
             this.Controls.Add(this.textBox_URL);
             this.Controls.Add(this.LaunchChannelButton);
             this.Controls.Add(this.RadioQualityLow);
@@ -229,7 +242,7 @@
             this.Controls.Add(this.ChannelGridView);
             this.Controls.Add(this.OAuthAvailableLabel);
             this.Controls.Add(this.RefreshChannelsButton);
-            this.Controls.Add(this.OAuthButton);
+            this.Controls.Add(this.OAuthTwitchButton);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(500, 200);
             this.Name = "VattenMediaForm";
@@ -246,7 +259,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button OAuthButton;
+        private System.Windows.Forms.Button OAuthTwitchButton;
         private System.Windows.Forms.Button RefreshChannelsButton;
         private System.Windows.Forms.Label OAuthAvailableLabel;
         private System.Windows.Forms.DataGridView ChannelGridView;
@@ -258,6 +271,7 @@
         private System.Windows.Forms.RadioButton RadioQualityLow;
         private System.Windows.Forms.Button LaunchChannelButton;
         private System.Windows.Forms.TextBox textBox_URL;
+        private System.Windows.Forms.Button OAuthYoutubeButton;
     }
 }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace VattenMedia.Infrastructure
 {
-    interface IStreamService
+    interface IStreamStarterService
     {
         event EventHandler<int> RunningProcessesChanged;
         void StartStream(Uri url, List<string> qualityOptions);

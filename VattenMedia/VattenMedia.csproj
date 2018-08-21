@@ -59,7 +59,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\TwitchChannel.cs" />
+    <Compile Include="Entities\LiveChannel.cs" />
+    <Compile Include="Infrastructure\YoutubeService.cs" />
     <Compile Include="UI\VattenMediaForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -68,7 +69,7 @@
     </Compile>
     <Compile Include="Infrastructure\StatusManager.cs" />
     <Compile Include="Infrastructure\IStatusManager.cs" />
-    <Compile Include="Infrastructure\IStreamService.cs" />
+    <Compile Include="Infrastructure\IStreamStarterService.cs" />
     <Compile Include="Infrastructure\StreamService.cs" />
     <Compile Include="UI\OAuthWindow.cs">
       <SubType>Form</SubType>
@@ -83,7 +84,7 @@
     <Compile Include="Infrastructure\ConfigHandler.cs" />
     <Compile Include="Entities\FollowedResponse.cs" />
     <Compile Include="Infrastructure\IConfigHandler.cs" />
-    <Compile Include="Infrastructure\ITwitchService.cs" />
+    <Compile Include="Infrastructure\IStreamingService.cs" />
     <Compile Include="Infrastructure\TwitchService.cs" />
     <EmbeddedResource Include="UI\VattenMediaForm.resx">
       <DependentUpon>VattenMediaForm.cs</DependentUpon>

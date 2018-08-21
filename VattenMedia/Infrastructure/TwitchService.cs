@@ -1,33 +1,30 @@
 ﻿using RestSharp;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using VattenMedia.Entities;
 
 namespace VattenMedia.Infrastructure
 {
-    public class TwitchService : ITwitchService
+    public class TwitchService : IStreamingService
     {
         private readonly IRestClient client;
         private readonly string baseUrl = Properties.Settings.Default.TwitchApiUrl;
         private readonly string clientId;
-        private readonly string clientSecret;
 
         public string OAuthUrl { get; }
-        public string RequestUrl { get; }
 
         public TwitchService(IConfigHandler configHandler)
         {
             var config = configHandler.Config;
             clientId = config.TwitchClientId;
-            clientSecret = config.TwitchClientSecret;
 
             OAuthUrl = baseUrl + $@"kraken/oauth2/authorize?client_id={clientId}&redirect_uri=http://localhost&response_type=token+id_token&scope=user_read openid";
-            RequestUrl = baseUrl +
-                $@"oauth2/token?client_id={clientId}&client_secret={clientSecret}&redirect_uri=http://localhost&grant_type=authorization_code&scope=user_read&code=";
 
             client = new RestClient(baseUrl);
         }
 
-        public async Task<TwitchRootResponse> GetLiveChannels(string oAuthId)
+        public async Task<List<LiveChannel>> GetLiveChannels(string oAuthId)
         {
             string requestUrl = baseUrl + @"kraken/streams/followed?stream_type=live";
 
@@ -38,7 +35,28 @@ namespace VattenMedia.Infrastructure
             request.AddHeader("Authorization", $"OAuth {oAuthId}");
 
             var response = await client.ExecuteTaskAsync<TwitchRootResponse>(request);
-            return response.Data;
+
+            return CreateChannels(response.Data);
+        }
+
+        private List<LiveChannel> CreateChannels(TwitchRootResponse inChannels)
+        {
+            var liveChannels = new List<LiveChannel>();
+
+            if (inChannels?.streams == null)
+            {
+                return liveChannels;
+            }
+
+            for (int i = 0; i < inChannels.streams.Count; i++)
+            {
+                var chan = inChannels.streams[i];
+                TimeSpan runtime = DateTime.Now.ToUniversalTime() - chan.created_at;
+                var liveChannel = new LiveChannel(chan.channel.name, chan.channel.status, chan.game, chan.viewers, new DateTime(runtime.Ticks).ToString("H\\h mm\\m"), chan.preview.medium, chan.channel.url);
+                liveChannels.Add(liveChannel);
+            }
+
+            return liveChannels;
         }
     }
 }

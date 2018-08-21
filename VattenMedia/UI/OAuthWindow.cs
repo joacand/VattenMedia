@@ -13,7 +13,7 @@ namespace VattenMedia
             InitializeComponent();
         }
 
-        public DialogResult Go(ITwitchService twitch)
+        public DialogResult Go(IStreamingService twitch)
         {
             OAuthWebBrowser.Navigate(twitch.OAuthUrl);
             DialogResult dialogResult = ShowDialog();

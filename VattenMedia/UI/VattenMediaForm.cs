@@ -13,11 +13,12 @@ namespace VattenMedia
     public partial class VattenMediaForm : Form
     {
         private readonly IConfigHandler configHandler;
-        private ITwitchService twitch;
+        private IStreamingService twitchService;
+        private IStreamingService youtubeService;
         private readonly IStatusManager statusManager;
-        private readonly IStreamService streamService;
+        private readonly IStreamStarterService streamService;
 
-        private List<TwitchChannel> channels = new List<TwitchChannel>();
+        private List<LiveChannel> channels = new List<LiveChannel>();
         private Timer statusTextTimer;
         private int runningProcesses = 0;
 
@@ -26,7 +27,8 @@ namespace VattenMedia
             InitializeComponent();
 
             configHandler = new ConfigHandler();
-            twitch = new TwitchService(configHandler);
+            twitchService = new TwitchService(configHandler);
+            youtubeService = new YoutubeService();
             statusManager = new StatusManager(ChangeStatusText);
             streamService = new StreamService(statusManager);
 
@@ -116,10 +118,20 @@ namespace VattenMedia
             }
         }
 
-        private void OAuthButton_Click(object sender, EventArgs e)
+        private void OAuthTwitchButton_Click(object sender, EventArgs e)
+        {
+            OAuth(twitchService);
+        }
+
+        private void OAuthYoutubeButton_Click(object sender, EventArgs e)
+        {
+            OAuth(youtubeService);
+        }
+
+        private void OAuth(IStreamingService streamingService)
         {
             OAuthWindow oAuth = new OAuthWindow();
-            oAuth.Go(twitch);
+            oAuth.Go(streamingService);
             configHandler.SetAccessToken(oAuth.AuthId);
             Reset();
             ListChannels();
@@ -147,10 +159,10 @@ namespace VattenMedia
                 return;
             }
 
-            TwitchRootResponse inChannels = null;
+            var liveChannels = new List<LiveChannel>();
             try
             {
-                inChannels = await twitch.GetLiveChannels(configHandler.Config.AccessToken);
+                liveChannels = await twitchService.GetLiveChannels(configHandler.Config.AccessToken);
             }
             catch (Exception e)
             {
@@ -158,21 +170,14 @@ namespace VattenMedia
                 return;
             }
 
-            if (inChannels?.streams == null)
+            for (int i = 0; i < liveChannels.Count; i++)
             {
-                ChangeStatusText("Error: Could not get live channels. Try to do OAuth again", TimeSpan.FromMilliseconds(2000));
-                return;
-            }
-
-            for (int i = 0; i < inChannels.streams.Count; i++)
-            {
-                var chan = inChannels.streams[i];
-                channels.Add(new TwitchChannel(chan.channel.name, chan.channel.url));
-                TimeSpan runtime = DateTime.Now.ToUniversalTime() - chan.created_at;
-                ChannelGridView.Rows.Add(chan.channel.name, chan.channel.status, chan.game, chan.viewers, new DateTime(runtime.Ticks).ToString("H\\h mm\\m"));
+                var liveChannel = liveChannels[i];
+                channels.Add(liveChannel);
+                ChannelGridView.Rows.Add(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime);
                 try
                 {
-                    Bitmap bitmap = await GetBmp(chan.preview.medium);
+                    Bitmap bitmap = await GetBmp(liveChannel.BitmapUrl);
                     if (bitmap != null)
                     {
                         ChannelGridView.Rows[i].Cells[5].Value = bitmap;
@@ -182,7 +187,7 @@ namespace VattenMedia
             }
         }
 
-        private async Task<Bitmap> GetBmp(string url)
+        private async Task<Bitmap> GetBmp(Uri url)
         {
             HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(url);
             myRequest.Method = "GET";

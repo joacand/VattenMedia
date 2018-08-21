@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace VattenMedia.Infrastructure
 {
-    class StreamService : IStreamService
+    class StreamService : IStreamStarterService
     {
         private IStatusManager statusManager;
         private int runningProcesses;
