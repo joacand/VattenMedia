@@ -7,7 +7,7 @@ namespace VattenMedia.Entities
         public string Name { get; }
         public string Title { get; }
         public string Game { get; }
-        public int Viewers { get; } 
+        public int Viewers { get; }
         public string RunTime { get; }
         public Uri BitmapUrl { get; }
         public Uri Url { get; }
@@ -19,8 +19,8 @@ namespace VattenMedia.Entities
             Game = game;
             Viewers = viewers;
             RunTime = runTime;
-            BitmapUrl = new Uri(bitmapUrl);
-            Url = new Uri(url);
+            BitmapUrl = string.IsNullOrWhiteSpace(bitmapUrl) ? null : new Uri(bitmapUrl);
+            Url = string.IsNullOrWhiteSpace(url) ? null : new Uri(url);
         }
 
         public override string ToString()

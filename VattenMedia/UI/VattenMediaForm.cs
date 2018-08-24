@@ -13,10 +13,10 @@ namespace VattenMedia
     public partial class VattenMediaForm : Form
     {
         private readonly IConfigHandler configHandler;
-        private IStreamingService twitchService;
-        private IStreamingService youtubeService;
+        private readonly IStreamingService twitchService;
+        private readonly IStreamingService youtubeService;
         private readonly IStatusManager statusManager;
-        private readonly IStreamStarterService streamService;
+        private readonly IStreamStarterService streamStarterService;
 
         private List<LiveChannel> channels = new List<LiveChannel>();
         private Timer statusTextTimer;
@@ -28,9 +28,9 @@ namespace VattenMedia
 
             configHandler = new ConfigHandler();
             twitchService = new TwitchService(configHandler);
-            youtubeService = new YoutubeService();
+            youtubeService = new YoutubeService(configHandler);
             statusManager = new StatusManager(ChangeStatusText);
-            streamService = new StreamService(statusManager);
+            streamStarterService = new StreamStarterService(statusManager);
 
             Init();
         }
@@ -56,7 +56,7 @@ namespace VattenMedia
 
         private void Init()
         {
-            streamService.RunningProcessesChanged +=
+            streamStarterService.RunningProcessesChanged +=
                 (s, e) => { RunningProcessesChangedHandler(e); };
 
             BackColor = Color.FromArgb(57, 46, 92);
@@ -106,35 +106,45 @@ namespace VattenMedia
 
         private void SetAccessTokenLabel()
         {
-            if (configHandler.HasAccessToken)
+            OAuthAvailableLabel.ForeColor = Color.Red;
+            string tokenMessage = "";
+
+            if (!configHandler.HasTwitchAccessToken && !configHandler.HasYoutubeAccessToken)
             {
-                OAuthAvailableLabel.Text = "Access token OK";
-                OAuthAvailableLabel.ForeColor = Color.Green;
+                tokenMessage = "Twitch & Youtube token NOK";
             }
-            else
+            else if (!configHandler.HasTwitchAccessToken)
             {
-                OAuthAvailableLabel.Text = "Access token NOK";
-                OAuthAvailableLabel.ForeColor = Color.Red;
+                tokenMessage = "Twitch token NOK";
             }
+            else if (!configHandler.HasYoutubeAccessToken)
+            {
+                tokenMessage = "Youtube token NOK";
+            }
+            OAuthAvailableLabel.Text = tokenMessage;
         }
 
         private void OAuthTwitchButton_Click(object sender, EventArgs e)
         {
-            OAuth(twitchService);
+            var authId = OAuth(twitchService);
+            configHandler.SetTwitchAccessToken(authId);
+            Reset();
+            ListChannels();
         }
 
         private void OAuthYoutubeButton_Click(object sender, EventArgs e)
         {
-            OAuth(youtubeService);
+            var authId = OAuth(youtubeService);
+            configHandler.SetYoutubeAccessToken(authId);
+            Reset();
+            ListChannels();
         }
 
-        private void OAuth(IStreamingService streamingService)
+        private string OAuth(IStreamingService streamingService)
         {
             OAuthWindow oAuth = new OAuthWindow(streamingService);
             oAuth.Go();
-            configHandler.SetAccessToken(oAuth.AuthId);
-            Reset();
-            ListChannels();
+            return oAuth.AuthId;
         }
 
         private void RefreshChannelsButton_Click(object sender, EventArgs e)
@@ -152,9 +162,21 @@ namespace VattenMedia
             SetAccessTokenLabel();
         }
 
-        private async void ListChannels()
+        private void ListChannels()
         {
-            if (!configHandler.HasAccessToken)
+            if (Properties.Settings.Default.TwitchEnabled)
+            {
+                ListChannels(twitchService, configHandler.Config.TwitchAccessToken);
+            }
+            if (Properties.Settings.Default.YoutubeEnabled)
+            {
+                ListChannels(youtubeService, configHandler.Config.YoutubeToken);
+            }
+        }
+
+        private async void ListChannels(IStreamingService streamingService, string accessToken)
+        {
+            if (string.IsNullOrWhiteSpace(accessToken))
             {
                 return;
             }
@@ -162,7 +184,7 @@ namespace VattenMedia
             var liveChannels = new List<LiveChannel>();
             try
             {
-                liveChannels = await twitchService.GetLiveChannels(configHandler.Config.AccessToken);
+                liveChannels = await streamingService.GetLiveChannels(accessToken);
             }
             catch (Exception e)
             {
@@ -170,17 +192,16 @@ namespace VattenMedia
                 return;
             }
 
-            for (int i = 0; i < liveChannels.Count; i++)
+            foreach (var liveChannel in liveChannels)
             {
-                var liveChannel = liveChannels[i];
                 channels.Add(liveChannel);
-                ChannelGridView.Rows.Add(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime);
+                int index = ChannelGridView.Rows.Add(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime);
                 try
                 {
                     Bitmap bitmap = await GetBmp(liveChannel.BitmapUrl);
                     if (bitmap != null)
                     {
-                        ChannelGridView.Rows[i].Cells[5].Value = bitmap;
+                        ChannelGridView.Rows[index].Cells[5].Value = bitmap;
                     }
                 }
                 catch { }
@@ -294,7 +315,7 @@ namespace VattenMedia
         private void StartStream(Uri url)
         {
             List<string> qualityOptions = GetQualityFromRadioButtons();
-            streamService.StartStream(url, qualityOptions);
+            streamStarterService.StartStream(url, qualityOptions);
         }
 
         private void Form1_Load(object sender, EventArgs e)

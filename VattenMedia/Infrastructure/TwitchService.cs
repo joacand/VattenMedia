@@ -52,18 +52,19 @@ namespace VattenMedia.Infrastructure
             {
                 var chan = inChannels.streams[i];
                 TimeSpan runtime = DateTime.Now.ToUniversalTime() - chan.created_at;
-                var liveChannel = new LiveChannel(chan.channel.name, chan.channel.status, chan.game, chan.viewers, new DateTime(runtime.Ticks).ToString("H\\h mm\\m"), chan.preview.medium, chan.channel.url);
+                var liveChannel = new LiveChannel(chan.channel.name, chan.channel.status, chan.game, 
+                    chan.viewers, new DateTime(runtime.Ticks).ToString("H\\h mm\\m"), chan.preview.medium, chan.channel.url);
                 liveChannels.Add(liveChannel);
             }
 
             return liveChannels;
         }
 
-        public string GetAuthIdFromUrl(string url)
+        public Task<string> GetAuthIdFromUrl(string url)
         {
-            if (url.Contains("access_token"))
+            if (url.Contains("access_token="))
             {
-                return url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
+                return Task.FromResult(url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0]);
             }
             return null;
         }

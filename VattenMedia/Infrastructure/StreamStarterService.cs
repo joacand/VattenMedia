@@ -4,14 +4,14 @@ using System.Diagnostics;
 
 namespace VattenMedia.Infrastructure
 {
-    class StreamService : IStreamStarterService
+    class StreamStarterService : IStreamStarterService
     {
         private IStatusManager statusManager;
         private int runningProcesses;
 
         public event EventHandler<int> RunningProcessesChanged;
 
-        public StreamService(IStatusManager statusManager)
+        public StreamStarterService(IStatusManager statusManager)
         {
             this.statusManager = statusManager;
         }
@@ -19,7 +19,7 @@ namespace VattenMedia.Infrastructure
         public void StartStream(Uri url, List<string> qualityOptions)
         {
             string process = Properties.Settings.Default.StreamUtilityPath;
-            string args = $@" {url} {String.Join(",", qualityOptions)} --config {Properties.Settings.Default.StreamUtilityRcPath}";
+            string args = $@" {url} {string.Join(",", qualityOptions)} --no-version-check --config {Properties.Settings.Default.StreamUtilityRcPath}";
             StartProcess(process, args);
         }
 

@@ -52,7 +52,7 @@
             // OAuthTwitchButton
             // 
             this.OAuthTwitchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OAuthTwitchButton.Location = new System.Drawing.Point(871, 540);
+            this.OAuthTwitchButton.Location = new System.Drawing.Point(864, 539);
             this.OAuthTwitchButton.Name = "OAuthTwitchButton";
             this.OAuthTwitchButton.Size = new System.Drawing.Size(81, 23);
             this.OAuthTwitchButton.TabIndex = 0;
@@ -77,7 +77,7 @@
             this.OAuthAvailableLabel.AutoSize = true;
             this.OAuthAvailableLabel.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OAuthAvailableLabel.ForeColor = System.Drawing.Color.Red;
-            this.OAuthAvailableLabel.Location = new System.Drawing.Point(756, 544);
+            this.OAuthAvailableLabel.Location = new System.Drawing.Point(705, 543);
             this.OAuthAvailableLabel.Name = "OAuthAvailableLabel";
             this.OAuthAvailableLabel.Size = new System.Drawing.Size(109, 15);
             this.OAuthAvailableLabel.TabIndex = 3;
@@ -218,7 +218,7 @@
             // OAuthYoutubeButton
             // 
             this.OAuthYoutubeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.OAuthYoutubeButton.Location = new System.Drawing.Point(958, 540);
+            this.OAuthYoutubeButton.Location = new System.Drawing.Point(951, 539);
             this.OAuthYoutubeButton.Name = "OAuthYoutubeButton";
             this.OAuthYoutubeButton.Size = new System.Drawing.Size(93, 23);
             this.OAuthYoutubeButton.TabIndex = 12;

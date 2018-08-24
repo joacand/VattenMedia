@@ -14,5 +14,11 @@
     <Setting Name="StreamUtilityRcPath" Type="System.String" Scope="User">
       <Value Profile="(Default)">ThirdParty/vattenmediarc</Value>
     </Setting>
+    <Setting Name="TwitchEnabled" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="YoutubeEnabled" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

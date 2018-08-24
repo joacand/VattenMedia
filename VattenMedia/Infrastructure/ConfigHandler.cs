@@ -7,7 +7,9 @@ namespace VattenMedia.Infrastructure
 {
     public class ConfigHandler : IConfigHandler
     {
-        public bool HasAccessToken => !string.IsNullOrWhiteSpace(Config.AccessToken);
+        public bool HasTwitchAccessToken => !string.IsNullOrWhiteSpace(Config.TwitchAccessToken);
+        public bool HasYoutubeAccessToken => !string.IsNullOrWhiteSpace(Config.YoutubeToken);
+        public bool HasYoutubeRefreshToken => !string.IsNullOrWhiteSpace(Config.YoutubeRefreshToken);
         public Config Config { get; private set; }
 
         private static readonly string configPath = "VattenMediaConfig.xml";
@@ -21,9 +23,21 @@ namespace VattenMedia.Infrastructure
             }
         }
 
-        public void SetAccessToken(string accessToken)
+        public void SetTwitchAccessToken(string accessToken)
         {
-            Config.AccessToken = accessToken;
+            Config.TwitchAccessToken = accessToken;
+            SaveToFile();
+        }
+
+        public void SetYoutubeAccessToken(string accessToken)
+        {
+            Config.YoutubeToken = accessToken;
+            SaveToFile();
+        }
+
+        public void SetYoutubeRefreshToken(string refreshToken)
+        {
+            Config.YoutubeRefreshToken = refreshToken;
             SaveToFile();
         }
 

@@ -4,9 +4,13 @@ namespace VattenMedia.Infrastructure
 {
     public interface IConfigHandler
     {
-        bool HasAccessToken { get; }
+        bool HasTwitchAccessToken { get; }
+        bool HasYoutubeAccessToken { get; }
+        bool HasYoutubeRefreshToken { get; }
         Config Config { get; }
-        void SetAccessToken(string accessToken);
+        void SetTwitchAccessToken(string accessToken);
+        void SetYoutubeAccessToken(string accessToken);
+        void SetYoutubeRefreshToken(string refreshToken);
         bool ReadFromFile();
         void SaveToFile();
     }

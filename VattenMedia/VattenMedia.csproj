@@ -60,6 +60,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Entities\LiveChannel.cs" />
+    <Compile Include="Entities\ChannelId.cs" />
+    <Compile Include="Entities\YoutubeRootResponse.cs" />
+    <Compile Include="Entities\YoutubeSearchRoot.cs" />
     <Compile Include="Infrastructure\YoutubeService.cs" />
     <Compile Include="UI\VattenMediaForm.cs">
       <SubType>Form</SubType>
@@ -70,7 +73,7 @@
     <Compile Include="Infrastructure\StatusManager.cs" />
     <Compile Include="Infrastructure\IStatusManager.cs" />
     <Compile Include="Infrastructure\IStreamStarterService.cs" />
-    <Compile Include="Infrastructure\StreamService.cs" />
+    <Compile Include="Infrastructure\StreamStarterService.cs" />
     <Compile Include="UI\OAuthWindow.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -120,6 +123,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="vattenmedia8.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="SHDocVw">
+      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>1</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

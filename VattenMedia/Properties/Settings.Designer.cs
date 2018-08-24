@@ -64,5 +64,23 @@ namespace VattenMedia.Properties {
                 this["StreamUtilityRcPath"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool TwitchEnabled {
+            get {
+                return ((bool)(this["TwitchEnabled"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool YoutubeEnabled {
+            get {
+                return ((bool)(this["YoutubeEnabled"]));
+            }
+        }
     }
 }
