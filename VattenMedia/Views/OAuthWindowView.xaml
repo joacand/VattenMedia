@@ -1,0 +1,17 @@
+﻿<Window x:Class="VattenMedia.Views.OAuthWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VattenMedia.Views"
+        mc:Ignorable="d"
+        Title="OAuthWindowView" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Content="This window will close when OAuth is complete"></Label>
+        <WebBrowser Grid.Row="1" Name="OAuthWebBrowser"></WebBrowser>
+    </Grid>
+</Window>

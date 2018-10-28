@@ -1,24 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VattenMedia.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="InitialLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="TwitchApiUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">https://api.twitch.tv/</Value>
-    </Setting>
-    <Setting Name="StreamUtilityPath" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">ThirdParty/StreamUtility/Streamlink.exe</Value>
-    </Setting>
-    <Setting Name="StreamUtilityRcPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)">ThirdParty/vattenmediarc</Value>
-    </Setting>
-    <Setting Name="TwitchEnabled" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="YoutubeEnabled" Type="System.Boolean" Scope="Application">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-  </Settings>
+<SettingsFile xmlns="uri:settings" CurrentProfile="(Default)">
+  <Profiles>
+    <Profile Name="(Default)" />
+  </Profiles>
+  <Settings />
 </SettingsFile>

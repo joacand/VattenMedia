@@ -1,0 +1,132 @@
+﻿<Window x:Class="VattenMedia.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VattenMedia"
+        xmlns:models="clr-namespace:VattenMedia.Models"
+        mc:Ignorable="d"
+        Title="VattenMedia" Height="750" Width="1400"
+        FontSize="14"
+        Background="{DynamicResource BG}"
+        Foreground="White">
+    <Window.Resources>
+        <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
+        <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
+        <models:EnumMatchToBooleanConverter x:Key="enumConverter" />
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="0"
+                  ItemsSource="{Binding LiveChannels}"
+                  AutoGenerateColumns="False"
+                  RowHeight="65"
+                  GridLinesVisibility="Horizontal"
+                  Background="{DynamicResource SBG}" 
+                  RowBackground="{DynamicResource SBG}"
+                  Foreground="White"
+                  Margin="5"
+                  RowHeaderWidth="0"
+                  IsReadOnly="True">
+            <DataGrid.Resources>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="{DynamicResource SBG}"></Setter>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
+                    <Setter Property="Margin" Value="5,0,0,5"></Setter>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                </Style>
+                <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="auto" Header="Channel" Binding="{Binding Name}"></DataGridTextColumn>
+                <DataGridTextColumn Width="*"  Header="Title" Binding="{Binding Title}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Game" Binding="{Binding Game}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Viewers" Binding="{Binding Viewers}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Runtime" Binding="{Binding RunTime}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="350" Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Image}" Stretch="UniformToFill"></Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="70"  Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.LaunchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding Url}"
+                                    Content="Launch"
+                                    Background="{DynamicResource SBG}"
+                                    Foreground="White">
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="5,0,5,0" LastChildFill="True">
+                <Button Command="{Binding RefreshCommand}" Padding="3" Content="Refresh" Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White"></Button>
+                <Button Command="{Binding LaunchFromUrlCommand}" Padding="3" Content="Launch from URL" Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White"></Button>
+                <TextBox FontSize="12" HorizontalAlignment="Stretch" Text="{Binding UrlTextBox, Mode=TwoWay}" Background="{DynamicResource BG}" Foreground="White"></TextBox>
+            </DockPanel>
+            <DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="3,0,0,0" LastChildFill="False">
+                <Label DockPanel.Dock="Left" Content="Quality:" Foreground="White" Margin="0,0,5,0"></Label>
+                <RadioButton DockPanel.Dock="Left" GroupName="Quality" Content="High" Margin="0,0,5,0" VerticalContentAlignment="Center" Foreground="White"
+                             IsChecked="{Binding Path=SelectedQuality, Mode=TwoWay, 
+                                 Converter={StaticResource enumConverter},
+                                 ConverterParameter=High}"></RadioButton>
+                <RadioButton DockPanel.Dock="Left" GroupName="Quality" Content="Medium" Margin="0,0,5,0" VerticalContentAlignment="Center" Foreground="White"
+                             IsChecked="{Binding Path=SelectedQuality, Mode=TwoWay, 
+                                 Converter={StaticResource enumConverter},
+                                 ConverterParameter=Medium}"></RadioButton>
+                <RadioButton DockPanel.Dock="Left" GroupName="Quality" Content="Low" Margin="0,0,5,0" VerticalContentAlignment="Center" Foreground="White"
+                             IsChecked="{Binding Path=SelectedQuality, Mode=TwoWay, 
+                                 Converter={StaticResource enumConverter},
+                                 ConverterParameter=Low}"></RadioButton>
+
+                <Button DockPanel.Dock="Right" Command="{Binding OAuthTwitchCommand}" Padding="3" Content="OAuth Twitch" Margin="5" Background="{DynamicResource SBG}" Foreground="White"></Button>
+            </DockPanel>
+        </Grid>
+        <StatusBar Grid.Row="2" Background="MediumPurple" Foreground="White">
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusText}"></TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>
