@@ -14,18 +14,6 @@
         <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
         <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
         <models:EnumMatchToBooleanConverter x:Key="enumConverter" />
-        <Style x:Key="Body_Content_DataGrid_Centering"
-                       TargetType="{x:Type DataGridCell}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type DataGridCell}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter VerticalAlignment="Center" />
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -47,8 +35,7 @@
                   Margin="5"
                   RowHeaderWidth="0"
                   IsReadOnly="True"
-                  BorderThickness="0"
-                  CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
+                  BorderThickness="0">
             <DataGrid.Resources>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource SBG}"></Setter>
@@ -60,11 +47,20 @@
                 <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
                     <Setter Property="Background" Value="{x:Null}" />
                     <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="White" />
                             <Setter Property="Background" Value="{x:Null}" />
                             <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -73,9 +69,9 @@
                     <Setter Property="BorderBrush" Value="{x:Null}" />
                     <Style.Triggers>
                         <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="White" />
                             <Setter Property="Background" Value="{x:Null}" />
                             <Setter Property="BorderBrush" Value="{x:Null}" />
-                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -84,6 +80,7 @@
                 <DataGridTextColumn Width=".5*" Header="Channel" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
+                            <Setter Property="TextBlock.Margin" Value="5,0,0,0"/>
                             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>

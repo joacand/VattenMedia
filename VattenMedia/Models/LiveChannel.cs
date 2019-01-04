@@ -7,7 +7,7 @@ using System.IO;
 
 namespace VattenMedia.Models
 {
-    public class LiveChannel
+    internal class LiveChannel
     {
         public string Name { get; }
         public string Title { get; }
@@ -18,7 +18,14 @@ namespace VattenMedia.Models
         public Uri Url { get; }
         public BitmapImage Image { get; private set; }
 
-        public LiveChannel(string name, string title, string game, int viewers, string runTime, string bitmapUrl, string url)
+        public LiveChannel(
+            string name,
+            string title,
+            string game,
+            int viewers,
+            string runTime,
+            string bitmapUrl,
+            string url)
         {
             Name = name;
             Title = title;
@@ -30,12 +37,14 @@ namespace VattenMedia.Models
             Image = GetImage();
         }
 
-        public LiveChannel(VattenMedia.Common.Entities.LiveChannel liveChannel)
-            : this(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime, liveChannel.BitmapUrl.ToString(), liveChannel.Url.ToString()) { }
+        public LiveChannel(Common.Entities.LiveChannel liveChannel)
+            : this(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime,
+                  liveChannel.BitmapUrl.ToString(), liveChannel.Url.ToString())
+        { }
 
         private BitmapImage GetImage()
         {
-            HttpWebRequest myRequest = (HttpWebRequest)WebRequest.Create(BitmapUrl);
+            var myRequest = (HttpWebRequest)WebRequest.Create(BitmapUrl);
             myRequest.Method = "GET";
             Bitmap bitmap = null;
             using (var myResponse = (HttpWebResponse)myRequest.GetResponse())
@@ -47,12 +56,11 @@ namespace VattenMedia.Models
             {
                 bitmap.Save(memory, ImageFormat.Bmp);
                 memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage();
+                var bitmapimage = new BitmapImage();
                 bitmapimage.BeginInit();
                 bitmapimage.StreamSource = memory;
                 bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
                 bitmapimage.EndInit();
-
                 return bitmapimage;
             }
         }

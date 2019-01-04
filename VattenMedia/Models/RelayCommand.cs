@@ -3,10 +3,10 @@ using System.Windows.Input;
 
 namespace VattenMedia.Models
 {
-    public class RelayCommand : ICommand
+    internal class RelayCommand : ICommand
     {
-        private readonly Predicate<object> canExecute;
         private readonly Action<object> execute;
+        private readonly Predicate<object> canExecute;
 
         public RelayCommand(Action<object> execute)
             : this(execute, null) { }
@@ -17,19 +17,23 @@ namespace VattenMedia.Models
             this.canExecute = canExecute;
         }
 
-        public event EventHandler CanExecuteChanged {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
-        }
+        public event EventHandler CanExecuteChanged;
 
         public bool CanExecute(object parameter)
         {
-            return canExecute != null ? canExecute(parameter) : true;
+            return canExecute != null
+                ? canExecute(parameter)
+                : true;
         }
 
         public void Execute(object parameter)
         {
             execute?.Invoke(parameter);
+        }
+
+        public void OnCanExecuteChanged()
+        {
+            CanExecuteChanged(this, EventArgs.Empty);
         }
     }
 }

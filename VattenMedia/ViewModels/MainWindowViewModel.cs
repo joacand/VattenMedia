@@ -13,7 +13,7 @@ using System.Timers;
 
 namespace VattenMedia.ViewModels
 {
-    public class MainWindowViewModel : BaseViewModel
+    internal class MainWindowViewModel : BaseViewModel
     {
         private readonly IConfigHandler configHandler;
         private readonly ITwitchService twitchService;
@@ -26,7 +26,7 @@ namespace VattenMedia.ViewModels
         private string statusText;
         private static readonly string exampleUrl = "http://www.twitch.tv/channel";
 
-        public ICommand LaunchCommand => new RelayCommand(OnLauchCommand);
+        public ICommand LaunchCommand => new RelayCommand(OnLaunchCommand);
         public ICommand RefreshCommand => new RelayCommand(OnRefreshCommand);
         public ICommand LaunchFromUrlCommand => new RelayCommand(OnLaunchFromUrlCommand);
         public ICommand OAuthTwitchCommand => new RelayCommand(OnOAuthTwitchCommand);
@@ -34,9 +34,10 @@ namespace VattenMedia.ViewModels
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
         public string UrlTextBox { get; set; } = exampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
-        public string StatusText { get => statusText; set { statusText = value; RaisePropertyChangedEvent(nameof(StatusText)); } }
+        public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
 
-        public MainWindowViewModel(IConfigHandler configHandler,
+        public MainWindowViewModel(
+            IConfigHandler configHandler,
             ITwitchService twitchService,
             IYoutubeService youtubeService,
             IStatusManager statusManager,
@@ -133,27 +134,20 @@ namespace VattenMedia.ViewModels
             }
         }
 
-        private void OnLauchCommand(object param)
+        private void OnLaunchCommand(object uri)
         {
-            StartStream((Uri)param);
+            StartStream((Uri)uri);
         }
 
-        private void OnRefreshCommand(object param)
+        private void OnLaunchFromUrlCommand(object _)
         {
-            ListChannels();
-        }
-
-        private void OnLaunchFromUrlCommand(object param)
-        {
-            string url = UrlTextBox;
-            if (url.Equals(exampleUrl))
+            if (!UrlTextBox.Equals(exampleUrl))
             {
-                return;
+                StartStream(new Uri(UrlTextBox));
             }
-            StartStream(new Uri(url));
         }
 
-        private void OnOAuthTwitchCommand(object param)
+        private void OnOAuthTwitchCommand(object _)
         {
             if (string.IsNullOrEmpty(configHandler.Config.TwitchClientId))
             {
@@ -163,14 +157,18 @@ namespace VattenMedia.ViewModels
             {
                 var oAuthWindow = new OAuthWindowView(twitchService, configHandler);
                 oAuthWindow.ShowDialog();
-                OnRefreshCommand(null);
+                OnRefreshCommand();
             }
+        }
+
+        private void OnRefreshCommand(object _ = null)
+        {
+            ListChannels();
         }
 
         private void StartStream(Uri url)
         {
-            List<string> qualityOptions = GetQualityFromRadioButtons();
-            streamStarterService.StartStream(url, qualityOptions);
+            streamStarterService.StartStream(url, GetQualityFromRadioButtons());
         }
 
         private List<string> GetQualityFromRadioButtons()

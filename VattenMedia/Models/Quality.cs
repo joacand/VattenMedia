@@ -1,6 +1,6 @@
 ﻿namespace VattenMedia.Models
 {
-    public enum Quality
+    internal enum Quality
     {
         High,
         Medium,
