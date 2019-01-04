@@ -33,7 +33,6 @@ namespace VattenMedia.Infrastructure.Services
             string requestUrl = baseUrl + @"kraken/streams/followed?stream_type=live";
 
             var request = new RestRequest(requestUrl, Method.GET);
-            request.JsonSerializer.ContentType = "application/json; charset=utf-8";
             request.AddHeader("Accept", "application/vnd.twitchtv.v5+json");
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", $"OAuth {oAuthId}");

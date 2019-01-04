@@ -81,7 +81,6 @@ namespace VattenMedia.Infrastructure.Services
                 }
 
                 var request = new RestRequest(requestUrl, Method.GET);
-                request.JsonSerializer.ContentType = "application/json; charset=utf-8";
                 request.AddHeader("Authorization", $"Bearer {oAuthId}");
 
                 var response = await client.ExecuteTaskAsync<YoutubeRootResponse>(request);
@@ -144,9 +143,7 @@ namespace VattenMedia.Infrastructure.Services
         {
             var liveChannels = new List<LiveChannel>();
             var requestUrl = $"{youtubeSearchEndpoint}?part=snippet&channelId={channelId}&eventType=live&maxResults=25&type=video&key={youtubeApiKey}";
-
             var request = new RestRequest(requestUrl, Method.GET);
-            request.JsonSerializer.ContentType = "application/json; charset=utf-8";
 
             var response = await client.ExecuteTaskAsync<Common.Entities.YoutubeSearch.YoutubeSearchRoot>(request);
             var data = response?.Data;
@@ -177,7 +174,6 @@ namespace VattenMedia.Infrastructure.Services
             var requestUrl = $"{youtubeVideosEndpoint}?part=liveStreamingDetails&id={channelId}&key={youtubeApiKey}";
 
             var request = new RestRequest(requestUrl, Method.GET);
-            request.JsonSerializer.ContentType = "application/json; charset=utf-8";
             */
         }
 

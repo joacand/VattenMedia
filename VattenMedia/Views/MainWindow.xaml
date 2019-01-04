@@ -14,6 +14,18 @@
         <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
         <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
         <models:EnumMatchToBooleanConverter x:Key="enumConverter" />
+        <Style x:Key="Body_Content_DataGrid_Centering"
+                       TargetType="{x:Type DataGridCell}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                        <Grid Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -26,18 +38,22 @@
                   ItemsSource="{Binding LiveChannels}"
                   AutoGenerateColumns="False"
                   RowHeight="65"
-                  GridLinesVisibility="Horizontal"
+                  GridLinesVisibility="None"
+                  AlternationCount="2"
+                  AlternatingRowBackground="#2A2637"
                   Background="{DynamicResource SBG}" 
-                  RowBackground="{DynamicResource SBG}"
+                  RowBackground="#282536"
                   Foreground="White"
                   Margin="5"
                   RowHeaderWidth="0"
-                  IsReadOnly="True">
+                  IsReadOnly="True"
+                  BorderThickness="0"
+                  CellStyle="{StaticResource Body_Content_DataGrid_Centering}">
             <DataGrid.Resources>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource SBG}"></Setter>
                     <Setter Property="BorderBrush" Value="Black"/>
-                    <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
+                    <Setter Property="BorderThickness" Value="0,0,0,0"></Setter>
                     <Setter Property="Margin" Value="5,0,0,5"></Setter>
                     <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
                 </Style>
@@ -48,6 +64,7 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{x:Null}" />
                             <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
@@ -58,20 +75,33 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="{x:Null}" />
                             <Setter Property="BorderBrush" Value="{x:Null}" />
+                            <Setter Property="VerticalAlignment" Value="Center"></Setter>
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="auto" Header="Channel" Binding="{Binding Name}"></DataGridTextColumn>
-                <DataGridTextColumn Width="*"  Header="Title" Binding="{Binding Title}">
+                <DataGridTextColumn Width=".5*" Header="Channel" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
                             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Game" Binding="{Binding Game}"></DataGridTextColumn>
+                <DataGridTextColumn Width="2*"  Header="Title" Binding="{Binding Title}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width=".7*" Header="Game" Binding="{Binding Game}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Width="auto" Header="Viewers" Binding="{Binding Viewers}"></DataGridTextColumn>
                 <DataGridTextColumn Width="auto" Header="Runtime" Binding="{Binding RunTime}"></DataGridTextColumn>
                 <DataGridTemplateColumn Width="350" Header="" IsReadOnly="True">
@@ -81,14 +111,15 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width="70"  Header="" IsReadOnly="True">
+                <DataGridTemplateColumn Width=".3*"  Header="" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Command="{Binding Path=DataContext.LaunchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding Url}"
                                     Content="Launch"
                                     Background="{DynamicResource SBG}"
-                                    Foreground="White">
+                                    Foreground="White" Width="1000" Height="1000"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0">
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -101,9 +132,11 @@
                 <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
             <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="5,0,5,0" LastChildFill="True">
-                <Button Command="{Binding RefreshCommand}" Padding="3" Content="Refresh" Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White"></Button>
-                <Button Command="{Binding LaunchFromUrlCommand}" Padding="3" Content="Launch from URL" Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White"></Button>
-                <TextBox FontSize="12" HorizontalAlignment="Stretch" Text="{Binding UrlTextBox, Mode=TwoWay}" Background="{DynamicResource BG}" Foreground="White"></TextBox>
+                <Button Command="{Binding RefreshCommand}" Padding="10,3,10,3" Content="Refresh channels"
+                        Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
+                <Button Command="{Binding LaunchFromUrlCommand}" Padding="10,3,10,3" Content="Launch from URL" Margin="0,0,5,0"
+                        Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
+                <TextBox FontSize="12" HorizontalAlignment="Stretch" Text="{Binding UrlTextBox, Mode=TwoWay}" Background="{DynamicResource SBG}" Foreground="White" BorderThickness="0"></TextBox>
             </DockPanel>
             <DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="3,0,0,0" LastChildFill="False">
                 <Label DockPanel.Dock="Left" Content="Quality:" Foreground="White" Margin="0,0,5,0"></Label>
@@ -120,7 +153,8 @@
                                  Converter={StaticResource enumConverter},
                                  ConverterParameter=Low}"></RadioButton>
 
-                <Button DockPanel.Dock="Right" Command="{Binding OAuthTwitchCommand}" Padding="3" Content="OAuth Twitch" Margin="5" Background="{DynamicResource SBG}" Foreground="White"></Button>
+                <Button DockPanel.Dock="Right" Command="{Binding OAuthTwitchCommand}" Padding="3" Content="OAuth Twitch" Margin="5" 
+                        Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
             </DockPanel>
         </Grid>
         <StatusBar Grid.Row="2" Background="MediumPurple" Foreground="White">
