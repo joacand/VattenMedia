@@ -15,4 +15,4 @@ The software is designed to be used together with `streamlink` (recommended) or 
 ## Screenshot
 
 Here is an example of how it looks like:
-![alt tag](https://i.imgur.com/2sbVemF.png "Example usage of the application")
+![alt tag](https://i.imgur.com/v0n9TBo.png "Example usage of the application")
