@@ -58,7 +58,7 @@ namespace VattenMedia.Infrastructure.Services
             client = new RestClient(baseUrl);
         }
 
-        public async Task<List<LiveChannel>> GetLiveChannels(string oAuthId)
+        public async Task<IEnumerable<LiveChannel>> GetLiveChannels(string oAuthId)
         {
             var channelIds = await GetSubscriptionChannelIds(oAuthId);
             return await GetYoutubeLiveStreams(channelIds);
@@ -119,7 +119,7 @@ namespace VattenMedia.Infrastructure.Services
             return channelIds;
         }
 
-        private async Task<List<LiveChannel>> GetYoutubeLiveStreams(List<ChannelId> channelIds)
+        private async Task<IEnumerable<LiveChannel>> GetYoutubeLiveStreams(List<ChannelId> channelIds)
         {
             ConcurrentBag<LiveChannel> youtubeLiveStreams = new ConcurrentBag<LiveChannel>();
 

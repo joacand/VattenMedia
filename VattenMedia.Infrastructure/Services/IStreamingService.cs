@@ -7,7 +7,7 @@ namespace VattenMedia.Infrastructure.Services
     public interface IStreamingService
     {
         string OAuthUrl { get; }
-        Task<List<LiveChannel>> GetLiveChannels(string oAuthId);
+        Task<IEnumerable<LiveChannel>> GetLiveChannels(string oAuthId);
         Task<string> GetAuthIdFromUrl(string url);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using VattenMedia.Common.Entities;
 using VattenMedia.Infrastructure;
 using VattenMedia.Infrastructure.Services;
@@ -116,21 +115,17 @@ namespace VattenMedia.ViewModels
         private async void ListChannels(IStreamingService streamingService, string accessToken)
         {
             LiveChannels.Clear();
-            var liveChannels = new List<LiveChannel>();
             try
             {
                 var channels = await streamingService.GetLiveChannels(accessToken);
-                liveChannels = channels.Select(x => new LiveChannel(x)).ToList();
+                foreach (var channel in channels)
+                {
+                    LiveChannels.Add(new LiveChannel(channel));
+                }
             }
             catch (Exception e)
             {
                 statusManager.ChangeStatusText($"Error: Failed to get live channels from Twitch. Exception: {e}");
-                return;
-            }
-
-            foreach (var liveChannel in liveChannels)
-            {
-                LiveChannels.Add(liveChannel);
             }
         }
 

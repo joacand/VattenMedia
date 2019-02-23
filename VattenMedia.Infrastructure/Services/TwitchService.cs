@@ -1,7 +1,6 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading.Tasks;
 using VattenMedia.Common.Entities;
 
@@ -28,10 +27,9 @@ namespace VattenMedia.Infrastructure.Services
             client = new RestClient(baseUrl);
         }
 
-        public async Task<List<LiveChannel>> GetLiveChannels(string oAuthId)
+        public async Task<IEnumerable<LiveChannel>> GetLiveChannels(string oAuthId)
         {
-            string requestUrl = baseUrl + @"kraken/streams/followed?stream_type=live";
-
+            var requestUrl = baseUrl + @"kraken/streams/followed?stream_type=live";
             var request = new RestRequest(requestUrl, Method.GET);
             request.AddHeader("Accept", "application/vnd.twitchtv.v5+json");
             request.AddHeader("Client-ID", clientId);
@@ -42,25 +40,15 @@ namespace VattenMedia.Infrastructure.Services
             return CreateChannels(response.Data);
         }
 
-        private List<LiveChannel> CreateChannels(TwitchRootResponse inChannels)
+        private IEnumerable<LiveChannel> CreateChannels(TwitchRootResponse inChannels)
         {
-            var liveChannels = new List<LiveChannel>();
-
-            if (inChannels?.streams == null)
+            if (inChannels?.streams != null)
             {
-                return liveChannels;
+                foreach (var inChannel in inChannels.streams)
+                {
+                    yield return CreateLiveChannel(inChannel);
+                }
             }
-
-            for (int i = 0; i < inChannels.streams.Count; i++)
-            {
-                var chan = inChannels.streams[i];
-                TimeSpan runtime = DateTime.Now.ToUniversalTime() - chan.created_at;
-                var liveChannel = new LiveChannel(chan.channel.name, chan.channel.status, chan.game,
-                    chan.viewers, new DateTime(runtime.Ticks).ToString("H\\h mm\\m"), chan.preview.medium, chan.channel.url);
-                liveChannels.Add(liveChannel);
-            }
-
-            return liveChannels;
         }
 
         public Task<string> GetAuthIdFromUrl(string url)
@@ -70,6 +58,19 @@ namespace VattenMedia.Infrastructure.Services
                 return Task.FromResult(url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0]);
             }
             return null;
+        }
+
+        private LiveChannel CreateLiveChannel(Stream channel)
+        {
+            var runtime = DateTime.Now.ToUniversalTime() - channel.created_at;
+            return new LiveChannel(
+                channel.channel.name,
+                channel.channel.status,
+                channel.game,
+                channel.viewers,
+                new DateTime(runtime.Ticks).ToString("H\\h mm\\m"),
+                channel.preview.medium,
+                channel.channel.url);
         }
     }
 }
