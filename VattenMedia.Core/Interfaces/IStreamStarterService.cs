@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Core.Interfaces
 {
     public interface IStreamStarterService
     {

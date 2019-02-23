@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VattenMedia.Common.Entities
+namespace VattenMedia.Core.Entities
 {
     public class LiveChannel
     {

@@ -1,6 +1,6 @@
-﻿using VattenMedia.Common.Entities;
+﻿using VattenMedia.Core.Entities;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Core.Interfaces
 {
     public interface IConfigHandler
     {

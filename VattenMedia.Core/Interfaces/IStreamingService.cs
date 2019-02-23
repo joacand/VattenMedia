@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using VattenMedia.Common.Entities;
+using VattenMedia.Core.Entities;
 
-namespace VattenMedia.Infrastructure.Services
+namespace VattenMedia.Core.Interfaces
 {
     public interface IStreamingService
     {

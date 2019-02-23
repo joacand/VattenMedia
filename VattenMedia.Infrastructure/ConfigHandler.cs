@@ -1,7 +1,8 @@
 ﻿using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
-using VattenMedia.Common.Entities;
+using VattenMedia.Core.Entities;
+using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure
 {

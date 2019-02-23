@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using VattenMedia.Common.Entities;
+using VattenMedia.Core.Entities;
+using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure.Services
 {

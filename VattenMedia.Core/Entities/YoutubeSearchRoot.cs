@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VattenMedia.Common.Entities.YoutubeSearch
+namespace VattenMedia.Core.Entities.YoutubeSearch
 {
     public class PageInfo
     {

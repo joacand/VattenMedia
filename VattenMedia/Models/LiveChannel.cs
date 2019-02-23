@@ -37,9 +37,14 @@ namespace VattenMedia.Models
             Image = GetImage();
         }
 
-        public LiveChannel(Common.Entities.LiveChannel liveChannel)
-            : this(liveChannel.Name, liveChannel.Title, liveChannel.Game, liveChannel.Viewers, liveChannel.RunTime,
-                  liveChannel.BitmapUrl.ToString(), liveChannel.Url.ToString())
+        public LiveChannel(Core.Entities.LiveChannel liveChannel) : this(
+                  liveChannel.Name,
+                  liveChannel.Title,
+                  liveChannel.Game,
+                  liveChannel.Viewers,
+                  liveChannel.RunTime,
+                  liveChannel.BitmapUrl.ToString(),
+                  liveChannel.Url.ToString())
         { }
 
         private BitmapImage GetImage()

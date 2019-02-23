@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using VattenMedia.Common.Entities;
+using VattenMedia.Core.Entities;
 using VattenMedia.Infrastructure;
-using VattenMedia.Infrastructure.Services;
 using System.Windows.Input;
 using VattenMedia.Models;
 using LiveChannel = VattenMedia.Models.LiveChannel;
 using VattenMedia.Views;
 using System.Timers;
+using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.ViewModels
 {
