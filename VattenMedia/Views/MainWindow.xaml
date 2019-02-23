@@ -3,8 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VattenMedia"
-        xmlns:models="clr-namespace:VattenMedia.Models"
+        xmlns:converters="clr-namespace:VattenMedia.Converters"
         mc:Ignorable="d"
         Title="VattenMedia" Height="750" Width="1400"
         FontSize="14"
@@ -13,7 +12,7 @@
     <Window.Resources>
         <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
         <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
-        <models:EnumMatchToBooleanConverter x:Key="enumConverter" />
+        <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>

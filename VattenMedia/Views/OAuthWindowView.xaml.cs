@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using VattenMedia.Core.Interfaces;
 using VattenMedia.Infrastructure;
 using VattenMedia.Infrastructure.Services;
 

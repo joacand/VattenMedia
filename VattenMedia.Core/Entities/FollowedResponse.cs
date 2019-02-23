@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace VattenMedia.Common.Entities
+namespace VattenMedia.Core.Entities
 {
     public class Preview
     {

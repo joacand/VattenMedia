@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Core.Interfaces
 {
     public interface IStatusManager
     {

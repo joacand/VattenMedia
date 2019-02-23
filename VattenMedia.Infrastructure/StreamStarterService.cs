@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure
 {
@@ -27,7 +28,7 @@ namespace VattenMedia.Infrastructure
 
         private void StartProcess(string process, string args)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo
+            var startInfo = new ProcessStartInfo
             {
                 FileName = process,
                 Arguments = args,
@@ -37,7 +38,7 @@ namespace VattenMedia.Infrastructure
                 CreateNoWindow = true
             };
 
-            Process processTemp = new Process
+            var processTemp = new Process
             {
                 StartInfo = startInfo,
                 EnableRaisingEvents = true

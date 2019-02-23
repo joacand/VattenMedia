@@ -1,4 +1,4 @@
-﻿namespace VattenMedia.Infrastructure.Services
+﻿namespace VattenMedia.Core.Interfaces
 {
     public interface ITwitchService : IStreamingService
     {

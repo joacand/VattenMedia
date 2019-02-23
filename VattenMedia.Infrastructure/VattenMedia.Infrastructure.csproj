@@ -6,11 +6,11 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="RestSharp" Version="106.6.3" />
+    <PackageReference Include="RestSharp" Version="106.6.7" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\VattenMedia.Common\VattenMedia.Common.csproj" />
+    <ProjectReference Include="..\VattenMedia.Core\VattenMedia.Core.csproj" />
   </ItemGroup>
 
 </Project>

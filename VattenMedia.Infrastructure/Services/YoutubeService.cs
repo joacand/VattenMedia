@@ -9,7 +9,8 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using VattenMedia.Common.Entities;
+using VattenMedia.Core.Entities;
+using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure.Services
 {
@@ -145,7 +146,7 @@ namespace VattenMedia.Infrastructure.Services
             var requestUrl = $"{youtubeSearchEndpoint}?part=snippet&channelId={channelId}&eventType=live&maxResults=25&type=video&key={youtubeApiKey}";
             var request = new RestRequest(requestUrl, Method.GET);
 
-            var response = await client.ExecuteTaskAsync<Common.Entities.YoutubeSearch.YoutubeSearchRoot>(request);
+            var response = await client.ExecuteTaskAsync<Core.Entities.YoutubeSearch.YoutubeSearchRoot>(request);
             var data = response?.Data;
 
             if (data?.items != null)

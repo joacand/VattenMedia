@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace VattenMedia.Models
+namespace VattenMedia.Converters
 {
     internal class EnumMatchToBooleanConverter : IValueConverter
     {

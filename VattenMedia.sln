@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VattenMedia", "VattenMedia\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VattenMedia.Infrastructure", "VattenMedia.Infrastructure\VattenMedia.Infrastructure.csproj", "{2913E22A-731E-4578-90A6-01986ED703F2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VattenMedia.Common", "VattenMedia.Common\VattenMedia.Common.csproj", "{4614ABB7-504A-4D8C-9C1C-5A4F22ED8BC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VattenMedia.Core", "VattenMedia.Core\VattenMedia.Core.csproj", "{4614ABB7-504A-4D8C-9C1C-5A4F22ED8BC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
