@@ -64,6 +64,12 @@ namespace VattenMedia.Infrastructure.Services
         private LiveChannel CreateLiveChannel(Stream channel)
         {
             var runtime = DateTime.Now.ToUniversalTime() - channel.created_at;
+
+            if (runtime.Ticks < DateTime.MinValue.Ticks || runtime.Ticks > DateTime.MaxValue.Ticks)
+            {
+                runtime = new TimeSpan(0);
+            }
+
             return new LiveChannel(
                 channel.channel.name,
                 channel.channel.status,
