@@ -97,6 +97,7 @@
     </ApplicationDefinition>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Converters\EnumMatchToBooleanConverter.cs" />
+    <Compile Include="MarkupExtensions\SettingBindingExtension.cs" />
     <Compile Include="Models\LiveChannel.cs" />
     <Compile Include="Models\RelayCommand.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />

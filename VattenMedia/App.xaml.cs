@@ -21,5 +21,10 @@ namespace VattenMedia
             var window = new MainWindow { DataContext = mainWindowViewModel };
             window.Show();
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            VattenMedia.Properties.Settings.Default.Save();
+        }
     }
 }

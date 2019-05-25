@@ -4,11 +4,16 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:VattenMedia.Converters"
+        xmlns:markupExtensions="clr-namespace:VattenMedia.MarkupExtensions"
         mc:Ignorable="d"
-        Title="VattenMedia" Height="750" Width="1400"
+        Title="VattenMedia"
         FontSize="14"
         Background="{DynamicResource BG}"
-        Foreground="White">
+        Foreground="White"
+        Height="{markupExtensions:SettingBinding Height}"
+        Width="{markupExtensions:SettingBinding Width}"
+        Left="{markupExtensions:SettingBinding Left}"
+        Top="{markupExtensions:SettingBinding Top}">
     <Window.Resources>
         <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
         <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
