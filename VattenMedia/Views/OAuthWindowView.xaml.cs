@@ -1,7 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using VattenMedia.Core.Interfaces;
-using VattenMedia.Infrastructure;
-using VattenMedia.Infrastructure.Services;
 
 namespace VattenMedia.Views
 {
@@ -18,8 +17,8 @@ namespace VattenMedia.Views
         public OAuthWindowView(IStreamingService streamingService, IConfigHandler configHandler)
         {
             InitializeComponent();
-            this.streamingService = streamingService;
-            this.configHandler = configHandler;
+            this.streamingService = streamingService ?? throw new ArgumentNullException(nameof(streamingService));
+            this.configHandler = configHandler ?? throw new ArgumentNullException(nameof(configHandler));
 
             OAuthWebBrowser.Navigate(streamingService.OAuthUrl);
             OAuthWebBrowser.Navigated += OAuthWebBrowser_Navigated;
@@ -31,15 +30,10 @@ namespace VattenMedia.Views
             Navigating(url);
         }
 
-        private void WebBrowser_NavigateError(object pDisp, ref object URL, ref object Frame, ref object StatusCode, ref bool Cancel)
-        {
-            Navigating((string)URL);
-        }
-
         private async void Navigating(string url)
         {
             // Ignore non-redirect URL navigations
-            if (url.Contains("twitch.tv") || url.Contains("google.com"))
+            if (url.Contains("twitch.tv", StringComparison.OrdinalIgnoreCase) || url.Contains("google.com", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }
