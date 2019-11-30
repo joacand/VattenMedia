@@ -60,6 +60,7 @@ namespace VattenMedia.Models
             using (MemoryStream memory = new MemoryStream())
             {
                 bitmap.Save(memory, ImageFormat.Bmp);
+                bitmap.Dispose();
                 memory.Position = 0;
                 var bitmapimage = new BitmapImage();
                 bitmapimage.BeginInit();

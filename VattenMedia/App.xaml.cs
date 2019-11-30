@@ -14,17 +14,12 @@ namespace VattenMedia
         {
             base.OnStartup(e);
 
-            IUnityContainer container = new UnityContainer();
+            using IUnityContainer container = new UnityContainer();
             container.AddRegistrations();
 
             var mainWindowViewModel = container.Resolve<MainWindowViewModel>();
             var window = new MainWindow { DataContext = mainWindowViewModel };
             window.Show();
-        }
-
-        private void Application_Exit(object sender, ExitEventArgs e)
-        {
-            VattenMedia.Properties.Settings.Default.Save();
         }
     }
 }

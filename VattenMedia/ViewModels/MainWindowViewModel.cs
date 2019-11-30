@@ -23,7 +23,7 @@ namespace VattenMedia.ViewModels
         private int runningProcesses;
         private Timer statusTextTimer;
         private string statusText;
-        private static readonly string exampleUrl = "http://www.twitch.tv/channel";
+        private static string ExampleUrl => "http://www.twitch.tv/channel";
 
         public ICommand LaunchCommand => new RelayCommand(OnLaunchCommand);
         public ICommand RefreshCommand => new RelayCommand(OnRefreshCommand);
@@ -31,7 +31,7 @@ namespace VattenMedia.ViewModels
         public ICommand OAuthTwitchCommand => new RelayCommand(OnOAuthTwitchCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
-        public string UrlTextBox { get; set; } = exampleUrl;
+        public string UrlTextBox { get; set; } = ExampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
         public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
 
@@ -136,7 +136,7 @@ namespace VattenMedia.ViewModels
 
         private void OnLaunchFromUrlCommand(object _)
         {
-            if (!UrlTextBox.Equals(exampleUrl))
+            if (!UrlTextBox.Equals(ExampleUrl))
             {
                 StartStream(new Uri(UrlTextBox));
             }
