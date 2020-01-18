@@ -9,6 +9,7 @@ using LiveChannel = VattenMedia.Models.LiveChannel;
 using VattenMedia.Views;
 using System.Timers;
 using VattenMedia.Core.Interfaces;
+using System.Linq;
 
 namespace VattenMedia.ViewModels
 {
@@ -118,7 +119,7 @@ namespace VattenMedia.ViewModels
             try
             {
                 var channels = await streamingService.GetLiveChannels(accessToken);
-                foreach (var channel in channels)
+                foreach (var channel in channels.OrderByDescending(x => x.Viewers))
                 {
                     LiveChannels.Add(new LiveChannel(channel));
                 }
