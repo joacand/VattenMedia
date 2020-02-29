@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using VattenMedia.Core.Entities;
 using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure
 {
-    public class StreamStarterService : IStreamStarterService
+    internal class StreamStarterService : IStreamStarterService
     {
         private readonly AppConfiguration appConfiguration;
-        private IStatusManager statusManager;
+        private readonly IStatusManager statusManager;
         private int runningProcesses;
 
         public event EventHandler<int> RunningProcessesChanged;

@@ -7,7 +7,7 @@ using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure.Services
 {
-    public class TwitchService : ITwitchService
+    internal class TwitchService : ITwitchService
     {
         private readonly AppConfiguration appConfiguration;
         private readonly IRestClient client;

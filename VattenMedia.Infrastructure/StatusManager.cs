@@ -3,7 +3,7 @@ using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure
 {
-    public class StatusManager : IStatusManager
+    internal class StatusManager : IStatusManager
     {
         private Action<string, TimeSpan?> changeStatus;
 

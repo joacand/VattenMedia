@@ -14,7 +14,7 @@ using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure.Services
 {
-    public class YoutubeService : IYoutubeService
+    internal class YoutubeService : IYoutubeService
     {
         private readonly IRestClient client;
         private readonly IConfigHandler configHandler;

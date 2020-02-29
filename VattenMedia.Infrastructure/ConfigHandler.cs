@@ -6,7 +6,7 @@ using VattenMedia.Core.Interfaces;
 
 namespace VattenMedia.Infrastructure
 {
-    public class ConfigHandler : IConfigHandler
+    internal class ConfigHandler : IConfigHandler
     {
         public bool HasTwitchAccessToken => !string.IsNullOrWhiteSpace(Config.TwitchAccessToken);
         public bool HasYoutubeAccessToken => !string.IsNullOrWhiteSpace(Config.YoutubeToken);

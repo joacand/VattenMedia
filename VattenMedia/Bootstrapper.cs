@@ -1,9 +1,8 @@
 ﻿using System.Configuration;
 using Unity;
 using Unity.Lifetime;
-using VattenMedia.Core.Interfaces;
-using VattenMedia.Infrastructure;
-using VattenMedia.Infrastructure.Services;
+using VattenMedia.Core.Entities;
+using VattenMedia.Infrastructure.Extensions;
 
 namespace VattenMedia
 {
@@ -11,12 +10,8 @@ namespace VattenMedia
     {
         public static void AddRegistrations(this IUnityContainer container)
         {
+            container.AddInfrastructureRegistrations();
             container.RegisterInstance(CreateAppConfiguration(), new ContainerControlledLifetimeManager());
-            container.RegisterType<IConfigHandler, ConfigHandler>();
-            container.RegisterType<IStreamStarterService, StreamStarterService>();
-            container.RegisterType<IStatusManager, StatusManager>(new ContainerControlledLifetimeManager());
-            container.RegisterType<ITwitchService, TwitchService>();
-            container.RegisterType<IYoutubeService, YoutubeService>();
         }
 
         private static AppConfiguration CreateAppConfiguration()

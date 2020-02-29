@@ -1,4 +1,4 @@
-﻿namespace VattenMedia.Infrastructure
+﻿namespace VattenMedia.Core.Entities
 {
     public class AppConfiguration
     {

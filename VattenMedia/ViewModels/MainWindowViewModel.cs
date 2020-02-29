@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using VattenMedia.Core.Entities;
-using VattenMedia.Infrastructure;
 using System.Windows.Input;
 using VattenMedia.Models;
 using LiveChannel = VattenMedia.Models.LiveChannel;
