@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using VattenMedia.Core.Entities;
-using System.Windows.Input;
-using VattenMedia.Models;
-using LiveChannel = VattenMedia.Models.LiveChannel;
-using VattenMedia.Views;
-using System.Timers;
-using VattenMedia.Core.Interfaces;
 using System.Linq;
+using System.Timers;
+using System.Windows.Controls;
+using System.Windows.Input;
+using VattenMedia.Core.Entities;
+using VattenMedia.Core.Interfaces;
+using VattenMedia.Models;
+using VattenMedia.Views;
+using LiveChannel = VattenMedia.Models.LiveChannel;
 
 namespace VattenMedia.ViewModels
 {
@@ -23,17 +24,24 @@ namespace VattenMedia.ViewModels
         private int runningProcesses;
         private Timer statusTextTimer;
         private string statusText;
+        private UserControl streamContentControl;
         private static string ExampleUrl => "http://www.twitch.tv/channel";
 
         public ICommand LaunchCommand => new RelayCommand(OnLaunchCommand);
         public ICommand RefreshCommand => new RelayCommand(OnRefreshCommand);
         public ICommand LaunchFromUrlCommand => new RelayCommand(OnLaunchFromUrlCommand);
         public ICommand OAuthTwitchCommand => new RelayCommand(OnOAuthTwitchCommand);
+        public ICommand ChangeToListViewCommand => new RelayCommand(OnChangeToListViewCommand);
+        public ICommand ChangeToGridViewCommand => new RelayCommand(OnChangeToGridViewCommand);
+
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
         public string UrlTextBox { get; set; } = ExampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
         public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
+        public UserControl StreamContentControl { get { return streamContentControl; } set => SetProperty(ref streamContentControl, value); }
+        public UserControl StreamGridControl { get; set; }
+        public UserControl StreamListControl { get; set; }
 
         public MainWindowViewModel(
             IConfigHandler configHandler,
@@ -50,14 +58,29 @@ namespace VattenMedia.ViewModels
             statusManager.SetCallback(ChangeStatusText);
             this.streamStarterService = streamStarterService;
             this.appConfiguration = appConfiguration;
-            Init();
-        }
 
-        private void Init()
-        {
             streamStarterService.RunningProcessesChanged +=
                 (s, e) => { RunningProcessesChangedHandler(e); };
             ListChannels();
+        }
+
+        public void Initialize()
+        {
+            LoadViewType();
+        }
+
+        private void LoadViewType()
+        {
+            var viewType = configHandler.GetViewType();
+            switch (viewType)
+            {
+                case ViewType.List:
+                    OnChangeToListViewCommand();
+                    break;
+                case ViewType.Grid:
+                    OnChangeToGridViewCommand();
+                    break;
+            }
         }
 
         private void RunningProcessesChangedHandler(int processes)
@@ -154,6 +177,18 @@ namespace VattenMedia.ViewModels
                 oAuthWindow.ShowDialog();
                 OnRefreshCommand();
             }
+        }
+
+        private void OnChangeToListViewCommand(object _ = null)
+        {
+            StreamContentControl = StreamListControl;
+            configHandler.SetViewType(ViewType.List);
+        }
+
+        private void OnChangeToGridViewCommand(object _ = null)
+        {
+            StreamContentControl = StreamGridControl;
+            configHandler.SetViewType(ViewType.Grid);
         }
 
         private void OnRefreshCommand(object _ = null)
