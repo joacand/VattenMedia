@@ -11,5 +11,7 @@
         public string YoutubeClientSecret { get; set; } = "";
         public string YoutubeToken { get; set; } = "";
         public string YoutubeRefreshToken { get; set; } = "";
+
+        public ViewType View { get; set; } = ViewType.List;
     }
 }

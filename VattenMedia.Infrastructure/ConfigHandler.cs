@@ -65,5 +65,19 @@ namespace VattenMedia.Infrastructure
                 serializer.Serialize(writer, Config);
             }
         }
+
+        public ViewType GetViewType()
+        {
+            return Config.View;
+        }
+
+        public void SetViewType(ViewType viewType)
+        {
+            if (Config.View != viewType)
+            {
+                Config.View = viewType;
+                SaveToFile();
+            }
+        }
     }
 }

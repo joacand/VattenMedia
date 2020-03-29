@@ -1,0 +1,53 @@
+﻿<UserControl x:Class="VattenMedia.Views.StreamGridView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:VattenMedia.Converters"
+        mc:Ignorable="d"
+        FontSize="14"
+        Background="{DynamicResource BG}"
+        Foreground="White">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
+        <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
+        <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <ItemsControl 
+            ItemsSource="{Binding LiveChannels}"                  
+            Background="{DynamicResource SBG}" 
+            Margin="5">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="1">
+                        <Button
+                            Command="{Binding Path=DataContext.LaunchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ItemsControl}}}"
+                            CommandParameter="{Binding Url}">
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Image Source="{Binding Path=BitmapUrl}" Stretch="Fill"></Image>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                        <TextBlock Text="{Binding Path=Description}" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Bottom"
+                                   TextWrapping="Wrap">
+                            <TextBlock.Effect>
+                                <DropShadowEffect ShadowDepth="2" Color="Black" BlurRadius="0" />
+                            </TextBlock.Effect>
+                        </TextBlock>
+                    </Grid>
+                </DataTemplate>
+
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

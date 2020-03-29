@@ -18,6 +18,8 @@ namespace VattenMedia.Models
         public Uri Url { get; }
         public BitmapImage Image { get; private set; }
 
+        public string Description => $"{Name} ({Viewers} viewers) - {Title}";
+
         public LiveChannel(
             string name,
             string title,

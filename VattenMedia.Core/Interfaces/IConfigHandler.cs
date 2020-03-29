@@ -13,5 +13,7 @@ namespace VattenMedia.Core.Interfaces
         void SetYoutubeRefreshToken(string refreshToken);
         bool ReadFromFile();
         void SaveToFile();
+        ViewType GetViewType();
+        void SetViewType(ViewType viewType);
     }
 }

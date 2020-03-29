@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="VattenMedia.Views.StreamListView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:VattenMedia.Converters"
+        mc:Ignorable="d"
+        Background="{DynamicResource BG}"
+        Foreground="White">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="BG" Color="#574692"></SolidColorBrush>
+        <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
+        <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <DataGrid ItemsSource="{Binding LiveChannels}"
+                  AutoGenerateColumns="False"
+                  RowHeight="65"
+                  GridLinesVisibility="None"
+                  AlternationCount="2"
+                  AlternatingRowBackground="#2A2637"
+                  Background="{DynamicResource SBG}" 
+                  RowBackground="#282536"
+                  Foreground="White"
+                  Margin="5"
+                  RowHeaderWidth="0"
+                  IsReadOnly="True"
+                  BorderThickness="0">
+            <DataGrid.Resources>
+                <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                    <Setter Property="Background" Value="{DynamicResource SBG}"></Setter>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="0,0,0,0"></Setter>
+                    <Setter Property="Margin" Value="5,0,0,5"></Setter>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="False" />
+                </Style>
+                <Style x:Key="{x:Type DataGridCell}" TargetType="{x:Type DataGridCell}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Grid Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center" />
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="{x:Type DataGridRow}">
+                    <Setter Property="Background" Value="{x:Null}" />
+                    <Setter Property="BorderBrush" Value="{x:Null}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="Background" Value="{x:Null}" />
+                            <Setter Property="BorderBrush" Value="{x:Null}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.Columns>
+                <DataGridTextColumn Width=".5*" Header="Channel" Binding="{Binding Name}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.Margin" Value="5,0,0,0"/>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="2*"  Header="Title" Binding="{Binding Title}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width=".7*" Header="Game" Binding="{Binding Game}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Viewers" Binding="{Binding Viewers}" SortDirection="Ascending"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Runtime" Binding="{Binding RunTime}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="350" Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Image}" Stretch="UniformToFill"></Image>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width=".3*"  Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.LaunchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                    CommandParameter="{Binding Url}"
+                                    Content="Launch"
+                                    Background="{DynamicResource SBG}"
+                                    Foreground="White" Width="1000" Height="1000"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0">
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

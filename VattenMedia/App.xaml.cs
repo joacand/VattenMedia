@@ -18,6 +18,11 @@ namespace VattenMedia
             container.AddRegistrations();
 
             var mainWindowViewModel = container.Resolve<MainWindowViewModel>();
+            mainWindowViewModel.StreamListControl = new StreamListView { DataContext = mainWindowViewModel };
+            mainWindowViewModel.StreamGridControl = new StreamGridView { DataContext = mainWindowViewModel };
+            mainWindowViewModel.StreamContentControl = mainWindowViewModel.StreamListControl;
+            mainWindowViewModel.Initialize();
+
             var window = new MainWindow { DataContext = mainWindowViewModel };
             window.Show();
         }
