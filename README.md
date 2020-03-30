@@ -12,7 +12,10 @@ The software is designed to be used together with `streamlink` (recommended) or 
 * Launch the program and press the `OAuth` button to perform OAuth authentication
 * Press `Launch` on the stream you want to watch
 
-## Screenshot
+## Screenshots
 
-Here is an example of how it looks like:
-![alt tag](https://i.imgur.com/v0n9TBo.png "Example usage of the application")
+Here is an example of how it looks like with list and grid view:
+
+![alt tag](https://i.imgur.com/XFjwsyS.png "Example usage of the application in list view")
+
+![alt tag](https://i.imgur.com/NwUMXsA.png "Example usage of the application in grid view")
