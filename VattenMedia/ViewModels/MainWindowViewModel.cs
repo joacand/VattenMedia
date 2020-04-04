@@ -33,13 +33,13 @@ namespace VattenMedia.ViewModels
         public ICommand OAuthTwitchCommand => new RelayCommand(OnOAuthTwitchCommand);
         public ICommand ChangeToListViewCommand => new RelayCommand(OnChangeToListViewCommand);
         public ICommand ChangeToGridViewCommand => new RelayCommand(OnChangeToGridViewCommand);
-
+        public ICommand AddToFavoritesCommand => new RelayCommand(OnAddToFavoritesCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
         public string UrlTextBox { get; set; } = ExampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
         public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
-        public UserControl StreamContentControl { get { return streamContentControl; } set => SetProperty(ref streamContentControl, value); }
+        public UserControl StreamContentControl { get => streamContentControl; set => SetProperty(ref streamContentControl, value); }
         public UserControl StreamGridControl { get; set; }
         public UserControl StreamListControl { get; set; }
 
@@ -141,9 +141,11 @@ namespace VattenMedia.ViewModels
             try
             {
                 var channels = await streamingService.GetLiveChannels(accessToken);
-                foreach (var channel in channels.OrderByDescending(x => x.Viewers))
+                foreach (var channel in channels
+                    .OrderByDescending(x => configHandler.IsFavorited(x.Name))
+                    .ThenByDescending(x => x.Viewers))
                 {
-                    LiveChannels.Add(new LiveChannel(channel));
+                    LiveChannels.Add(new LiveChannel(channel, configHandler.IsFavorited(channel.Name)));
                 }
             }
             catch (Exception e)
@@ -191,9 +193,31 @@ namespace VattenMedia.ViewModels
             configHandler.SetViewType(ViewType.Grid);
         }
 
+        private void OnAddToFavoritesCommand(object selectedItem)
+        {
+            if (selectedItem != null && selectedItem is LiveChannel channel)
+            {
+                var isFavorited = configHandler.ToggleFavorited(channel.Name);
+                channel.IsFavorited = isFavorited;
+                RefreshChannelsUi();
+            }
+        }
+
         private void OnRefreshCommand(object _ = null)
         {
             ListChannels();
+        }
+
+        private void RefreshChannelsUi()
+        {
+            var channels = new List<LiveChannel>(LiveChannels);
+            LiveChannels.Clear();
+            foreach (var channel in channels
+                .OrderByDescending(x => configHandler.IsFavorited(x.Name))
+                .ThenByDescending(x => x.Viewers))
+            {
+                LiveChannels.Add(channel);
+            }
         }
 
         private void StartStream(Uri url)

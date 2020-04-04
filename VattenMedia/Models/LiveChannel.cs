@@ -17,6 +17,7 @@ namespace VattenMedia.Models
         public Uri BitmapUrl { get; }
         public Uri Url { get; }
         public BitmapImage Image { get; private set; }
+        public bool IsFavorited { get; set; }
 
         public string Description => $"{Name} ({Viewers} viewers) - {Title}";
 
@@ -27,7 +28,8 @@ namespace VattenMedia.Models
             int viewers,
             string runTime,
             string bitmapUrl,
-            string url)
+            string url,
+            bool isFavorited)
         {
             Name = name;
             Title = title;
@@ -37,16 +39,18 @@ namespace VattenMedia.Models
             BitmapUrl = string.IsNullOrWhiteSpace(bitmapUrl) ? null : new Uri(bitmapUrl);
             Url = string.IsNullOrWhiteSpace(url) ? null : new Uri(url);
             Image = GetImage();
+            IsFavorited = isFavorited;
         }
 
-        public LiveChannel(Core.Entities.LiveChannel liveChannel) : this(
+        public LiveChannel(Core.Entities.LiveChannel liveChannel, bool isFavorited) : this(
                   liveChannel.Name,
                   liveChannel.Title,
                   liveChannel.Game,
                   liveChannel.Viewers,
                   liveChannel.RunTime,
                   liveChannel.BitmapUrl.ToString(),
-                  liveChannel.Url.ToString())
+                  liveChannel.Url.ToString(),
+                  isFavorited)
         { }
 
         private BitmapImage GetImage()
