@@ -1,17 +1,20 @@
-﻿namespace VattenMedia.Core.Entities
+﻿using System.Collections.Generic;
+
+namespace VattenMedia.Core.Entities
 {
     public class Config
     {
-        public string TwitchAccessToken { get; set; } = "";
-        public string TwitchClientId { get; set; } = "";
+        public string TwitchAccessToken { get; set; } = string.Empty;
+        public string TwitchClientId { get; set; } = string.Empty;
 
-        public string YoutubeChannelId { get; set; } = "";
-        public string YoutubeApiKey { get; set; } = "";
-        public string YoutubeClientId { get; set; } = "";
-        public string YoutubeClientSecret { get; set; } = "";
-        public string YoutubeToken { get; set; } = "";
-        public string YoutubeRefreshToken { get; set; } = "";
+        public string YoutubeChannelId { get; set; } = string.Empty;
+        public string YoutubeApiKey { get; set; } = string.Empty;
+        public string YoutubeClientId { get; set; } = string.Empty;
+        public string YoutubeClientSecret { get; set; } = string.Empty;
+        public string YoutubeToken { get; set; } = string.Empty;
+        public string YoutubeRefreshToken { get; set; } = string.Empty;
 
         public ViewType View { get; set; } = ViewType.List;
+        public HashSet<string> FavoritedStreams { get; set; } = new HashSet<string>();
     }
 }

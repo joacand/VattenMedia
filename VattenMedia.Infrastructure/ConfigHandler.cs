@@ -79,5 +79,26 @@ namespace VattenMedia.Infrastructure
                 SaveToFile();
             }
         }
+
+        public bool IsFavorited(string stream)
+        {
+            return Config.FavoritedStreams.Contains(stream);
+        }
+
+        public bool ToggleFavorited(string stream)
+        {
+            var isFavoriteResult = false;
+            if (IsFavorited(stream))
+            {
+                Config.FavoritedStreams.Remove(stream);
+            }
+            else
+            {
+                Config.FavoritedStreams.Add(stream);
+                isFavoriteResult = true;
+            }
+            SaveToFile();
+            return isFavoriteResult;
+        }
     }
 }

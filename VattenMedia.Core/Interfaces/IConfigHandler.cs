@@ -15,5 +15,7 @@ namespace VattenMedia.Core.Interfaces
         void SaveToFile();
         ViewType GetViewType();
         void SetViewType(ViewType viewType);
+        bool ToggleFavorited(string stream);
+        bool IsFavorited(string stream);
     }
 }
