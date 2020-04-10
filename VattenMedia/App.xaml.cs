@@ -20,6 +20,7 @@ namespace VattenMedia
             var mainWindowViewModel = container.Resolve<MainWindowViewModel>();
             mainWindowViewModel.StreamListControl = new StreamListView { DataContext = mainWindowViewModel };
             mainWindowViewModel.StreamGridControl = new StreamGridView { DataContext = mainWindowViewModel };
+            mainWindowViewModel.VideoListControl = new VideoListView { DataContext = mainWindowViewModel };
             mainWindowViewModel.StreamContentControl = mainWindowViewModel.StreamListControl;
             mainWindowViewModel.Initialize();
 

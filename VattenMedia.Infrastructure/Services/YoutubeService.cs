@@ -65,6 +65,11 @@ namespace VattenMedia.Infrastructure.Services
             return await GetYoutubeLiveStreams(channelIds);
         }
 
+        public Task<IEnumerable<Video>> GetVideos(string oAthId, string channelId)
+        {
+            return Task.FromResult<IEnumerable<Video>>(new List<Video>());
+        }
+
         private async Task<List<ChannelId>> GetSubscriptionChannelIds(string oAuthId)
         {
             var channelIds = new List<ChannelId>();
@@ -158,7 +163,7 @@ namespace VattenMedia.Infrastructure.Services
                     {
                         string url = $"https://www.youtube.com/watch?v={videoid}";
                         int viewers = await GetViewersFromStream(videoid);
-                        var liveChannel = new LiveChannel(item?.snippet?.channelTitle, item?.snippet?.title, "N/A", 0, "", item?.snippet?.thumbnails?.medium?.url, url);
+                        var liveChannel = new LiveChannel(item?.snippet?.channelTitle, item?.snippet?.title, "N/A", 0, "", item?.snippet?.thumbnails?.medium?.url, url, item?.snippet?.channelId);
                         liveChannels.Add(liveChannel);
                     }
                 }

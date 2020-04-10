@@ -10,6 +10,7 @@ using VattenMedia.Core.Interfaces;
 using VattenMedia.Models;
 using VattenMedia.Views;
 using LiveChannel = VattenMedia.Models.LiveChannel;
+using Video = VattenMedia.Models.Video;
 
 namespace VattenMedia.ViewModels
 {
@@ -34,14 +35,17 @@ namespace VattenMedia.ViewModels
         public ICommand ChangeToListViewCommand => new RelayCommand(OnChangeToListViewCommand);
         public ICommand ChangeToGridViewCommand => new RelayCommand(OnChangeToGridViewCommand);
         public ICommand AddToFavoritesCommand => new RelayCommand(OnAddToFavoritesCommand);
+        public ICommand OpenVideosForChannelCommand => new RelayCommand(OnOpenVideosForChannelCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
+        public ObservableCollection<Video> ChannelVideos { get; private set; } = new ObservableCollection<Video>();
         public string UrlTextBox { get; set; } = ExampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
         public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
         public UserControl StreamContentControl { get => streamContentControl; set => SetProperty(ref streamContentControl, value); }
         public UserControl StreamGridControl { get; set; }
         public UserControl StreamListControl { get; set; }
+        public UserControl VideoListControl { get; set; }
 
         public MainWindowViewModel(
             IConfigHandler configHandler,
@@ -123,6 +127,24 @@ namespace VattenMedia.ViewModels
             }
         }
 
+        private async void ListVideos(string channelId)
+        {
+            ChannelVideos.Clear();
+            try
+            {
+                var videos = await twitchService.GetVideos(configHandler.Config.TwitchAccessToken, channelId);
+                foreach (var video in videos.OrderByDescending(x => x.PublishedAt))
+                {
+                    ChannelVideos.Add(new Video(video.Name, video.Title, video.Game, video.Length, video.BitmapUrl, video.Url, video.PublishedAt));
+                }
+            }
+            catch (Exception e)
+            {
+                statusManager.ChangeStatusText($"Error: Failed to get videos from Twitch. Exception: {e}");
+            }
+            ChangeToVideoListView();
+        }
+
         private void ListChannels()
         {
             if (appConfiguration.TwitchEnabled && configHandler.HasTwitchAccessToken)
@@ -193,6 +215,11 @@ namespace VattenMedia.ViewModels
             configHandler.SetViewType(ViewType.Grid);
         }
 
+        private void ChangeToVideoListView()
+        {
+            StreamContentControl = VideoListControl;
+        }
+
         private void OnAddToFavoritesCommand(object selectedItem)
         {
             if (selectedItem != null && selectedItem is LiveChannel channel)
@@ -200,6 +227,14 @@ namespace VattenMedia.ViewModels
                 var isFavorited = configHandler.ToggleFavorited(channel.Name);
                 channel.IsFavorited = isFavorited;
                 RefreshChannelsUi();
+            }
+        }
+
+        private void OnOpenVideosForChannelCommand(object selectedItem)
+        {
+            if (selectedItem != null && selectedItem is LiveChannel channel)
+            {
+                ListVideos(channel.ChannelId);
             }
         }
 

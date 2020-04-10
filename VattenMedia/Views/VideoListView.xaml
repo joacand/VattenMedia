@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="VattenMedia.Views.StreamListView"
+﻿<UserControl x:Class="VattenMedia.Views.VideoListView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -14,7 +14,7 @@
         <converters:BoolToStringConverter x:Key="booleanToStringConverter" FalseValue="" TrueValue="★" />
     </UserControl.Resources>
     <Grid>
-        <DataGrid ItemsSource="{Binding LiveChannels}"
+        <DataGrid ItemsSource="{Binding ChannelVideos}"
                   AutoGenerateColumns="False"
                   RowHeight="65"
                   GridLinesVisibility="None"
@@ -27,16 +27,6 @@
                   RowHeaderWidth="0"
                   IsReadOnly="True"
                   BorderThickness="0">
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Toggle Favorite"
-                              Command="{Binding Path=AddToFavoritesCommand}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
-                    <MenuItem Header="Channel videos"
-                              Command="{Binding Path=OpenVideosForChannelCommand}"
-                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>
             <DataGrid.Resources>
                 <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                     <Setter Property="Background" Value="{DynamicResource SBG}"></Setter>
@@ -78,18 +68,10 @@
                 </Style>
             </DataGrid.Resources>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="auto" Header="" Binding="{Binding IsFavorited, Converter={StaticResource booleanToStringConverter}}">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style>
-                            <Setter Property="TextBlock.Margin" Value="5,0,5,0"/>
-                            <Setter Property="TextBlock.Foreground" Value="Gold" />
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
                 <DataGridTextColumn Width=".5*" Header="Channel" Binding="{Binding Name}">
                     <DataGridTextColumn.ElementStyle>
                         <Style>
-                            <Setter Property="TextBlock.Margin" Value="0,0,0,0"/>
+                            <Setter Property="TextBlock.Margin" Value="5,0,0,0"/>
                             <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
                         </Style>
                     </DataGridTextColumn.ElementStyle>
@@ -108,8 +90,20 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Viewers" Binding="{Binding Viewers}"></DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Runtime" Binding="{Binding RunTime}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Length" Binding="{Binding Length}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.Margin" Value="0,0,10,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Published at" Binding="{Binding PublishedAt, StringFormat=yyyy-MM-dd HH:mm}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style>
+                            <Setter Property="TextBlock.Margin" Value="0,0,10,0"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn Width="350" Header="" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

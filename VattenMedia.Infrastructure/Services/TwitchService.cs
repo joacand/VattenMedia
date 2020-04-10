@@ -3,13 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using VattenMedia.Core.Entities;
+using VattenMedia.Core.Entities.Twitch;
 using VattenMedia.Core.Interfaces;
+using Video = VattenMedia.Core.Entities.Video;
 
 namespace VattenMedia.Infrastructure.Services
 {
     internal class TwitchService : ITwitchService
     {
-        private readonly AppConfiguration appConfiguration;
         private readonly IRestClient client;
         private readonly string baseUrl;
         private readonly string clientId;
@@ -18,7 +19,6 @@ namespace VattenMedia.Infrastructure.Services
 
         public TwitchService(IConfigHandler configHandler, AppConfiguration appConfiguration)
         {
-            this.appConfiguration = appConfiguration;
             var config = configHandler.Config;
             clientId = config.TwitchClientId;
             baseUrl = appConfiguration.TwitchApiUrl;
@@ -36,12 +36,34 @@ namespace VattenMedia.Infrastructure.Services
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", $"OAuth {oAuthId}");
 
-            var response = await client.ExecuteTaskAsync<TwitchRootResponse>(request);
+            var response = await client.ExecuteTaskAsync<TwitchStreamsRootResponse>(request);
 
             return CreateChannels(response.Data);
         }
 
-        private IEnumerable<LiveChannel> CreateChannels(TwitchRootResponse inChannels)
+        public async Task<IEnumerable<Video>> GetVideos(string oAuthId, string channelId)
+        {
+            var requestUrl = baseUrl + $"kraken/channels/{channelId}/videos";
+            var request = new RestRequest(requestUrl, Method.GET);
+            request.AddHeader("Accept", "application/vnd.twitchtv.v5+json");
+            request.AddHeader("Client-ID", clientId);
+            request.AddHeader("Authorization", $"OAuth {oAuthId}");
+
+            var response = await client.ExecuteTaskAsync<TwitchVideosRootResponse>(request);
+
+            return CreateVideos(response.Data);
+        }
+
+        public Task<string> GetAuthIdFromUrl(string url)
+        {
+            if (url.Contains("access_token="))
+            {
+                return Task.FromResult(url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0]);
+            }
+            return null;
+        }
+
+        private IEnumerable<LiveChannel> CreateChannels(TwitchStreamsRootResponse inChannels)
         {
             if (inChannels?.streams != null)
             {
@@ -52,13 +74,15 @@ namespace VattenMedia.Infrastructure.Services
             }
         }
 
-        public Task<string> GetAuthIdFromUrl(string url)
+        private IEnumerable<Video> CreateVideos(TwitchVideosRootResponse inVideos)
         {
-            if (url.Contains("access_token="))
+            if (inVideos?.videos != null)
             {
-                return Task.FromResult(url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0]);
+                foreach (var inVideo in inVideos.videos)
+                {
+                    yield return CreateVideo(inVideo);
+                }
             }
-            return null;
         }
 
         private LiveChannel CreateLiveChannel(Stream channel)
@@ -76,8 +100,21 @@ namespace VattenMedia.Infrastructure.Services
                 channel.game,
                 channel.viewers,
                 new DateTime(runtime.Ticks).ToString("H\\h mm\\m"),
-                channel.preview.medium,
-                channel.channel.url);
+                channel.preview.large,
+                channel.channel.url,
+                channel.channel._id.ToString());
+        }
+
+        private Video CreateVideo(Core.Entities.Twitch.Video inVideo)
+        {
+            return new Video(
+                inVideo.channel.name,
+                inVideo.title,
+                inVideo.game,
+                inVideo.length,
+                inVideo.preview.large,
+                new Uri(inVideo.url),
+                inVideo.published_at);
         }
     }
 }
