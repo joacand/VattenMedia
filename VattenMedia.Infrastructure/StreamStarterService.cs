@@ -22,9 +22,22 @@ namespace VattenMedia.Infrastructure
 
         public void StartStream(Uri url, List<string> qualityOptions)
         {
-            string process = appConfiguration.StreamUtilityPath;
-            string args = $@" {url} {string.Join(",", qualityOptions)} --no-version-check --config {appConfiguration.StreamUtilityRcPath}";
+            var process = appConfiguration.StreamUtilityPath;
+            var args = $@" {url} {string.Join(",", qualityOptions)} --no-version-check --config {appConfiguration.StreamUtilityRcPath}";
+            args = SetArgsIfVod(args, url);
             StartProcess(process, args);
+        }
+
+        /// <summary>
+        /// Arguments specifically if the started video is a VOD
+        /// </summary>
+        private string SetArgsIfVod(string args, Uri url)
+        {
+            if (url.ToString().ToUpperInvariant().Contains("/VIDEOS/"))
+            {
+                args += " --player-passthrough=hls";
+            }
+            return args;
         }
 
         private void StartProcess(string process, string args)
