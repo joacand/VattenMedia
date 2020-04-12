@@ -23,7 +23,7 @@ namespace VattenMedia.Infrastructure.Services
             clientId = config.TwitchClientId;
             baseUrl = appConfiguration.TwitchApiUrl;
 
-            OAuthUrl = baseUrl + $@"kraken/oauth2/authorize?client_id={clientId}&redirect_uri=http://localhost&response_type=token+id_token&scope=user_read openid";
+            OAuthUrl = baseUrl + $@"kraken/oauth2/authorize?client_id={clientId}&redirect_uri=http://localhost&response_type=token+id_token&scope=user:read:email+chat:read openid";
 
             client = new RestClient(baseUrl);
         }
