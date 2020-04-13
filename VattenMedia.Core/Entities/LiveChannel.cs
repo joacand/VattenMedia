@@ -11,8 +11,9 @@ namespace VattenMedia.Core.Entities
         public string RunTime { get; }
         public Uri BitmapUrl { get; }
         public Uri Url { get; }
+        public string ChannelId { get; }
 
-        public LiveChannel(string name, string title, string game, int viewers, string runTime, string bitmapUrl, string url)
+        public LiveChannel(string name, string title, string game, int viewers, string runTime, string bitmapUrl, string url, string channelId)
         {
             Name = name;
             Title = title;
@@ -21,6 +22,7 @@ namespace VattenMedia.Core.Entities
             RunTime = runTime;
             BitmapUrl = string.IsNullOrWhiteSpace(bitmapUrl) ? null : new Uri(bitmapUrl);
             Url = string.IsNullOrWhiteSpace(url) ? null : new Uri(url);
+            ChannelId = channelId;
         }
 
         public override string ToString()

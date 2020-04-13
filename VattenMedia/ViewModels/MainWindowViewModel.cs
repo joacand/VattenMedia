@@ -10,6 +10,7 @@ using VattenMedia.Core.Interfaces;
 using VattenMedia.Models;
 using VattenMedia.Views;
 using LiveChannel = VattenMedia.Models.LiveChannel;
+using Video = VattenMedia.Models.Video;
 
 namespace VattenMedia.ViewModels
 {
@@ -25,7 +26,7 @@ namespace VattenMedia.ViewModels
         private Timer statusTextTimer;
         private string statusText;
         private UserControl streamContentControl;
-        private static string ExampleUrl => "http://www.twitch.tv/channel";
+        private static string ExampleUrl => "https://www.twitch.tv/channel";
 
         public ICommand LaunchCommand => new RelayCommand(OnLaunchCommand);
         public ICommand RefreshCommand => new RelayCommand(OnRefreshCommand);
@@ -34,14 +35,18 @@ namespace VattenMedia.ViewModels
         public ICommand ChangeToListViewCommand => new RelayCommand(OnChangeToListViewCommand);
         public ICommand ChangeToGridViewCommand => new RelayCommand(OnChangeToGridViewCommand);
         public ICommand AddToFavoritesCommand => new RelayCommand(OnAddToFavoritesCommand);
+        public ICommand OpenVideosForChannelCommand => new RelayCommand(OnOpenVideosForChannelCommand);
+        public ICommand OpenVideosCommand => new RelayCommand(OnOpenVideosCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
+        public ObservableCollection<Video> ChannelVideos { get; private set; } = new ObservableCollection<Video>();
         public string UrlTextBox { get; set; } = ExampleUrl;
         public Quality SelectedQuality { get; set; } = Quality.High;
         public string StatusText { get => statusText; set => SetProperty(ref statusText, value); }
         public UserControl StreamContentControl { get => streamContentControl; set => SetProperty(ref streamContentControl, value); }
         public UserControl StreamGridControl { get; set; }
         public UserControl StreamListControl { get; set; }
+        public UserControl VideoListControl { get; set; }
 
         public MainWindowViewModel(
             IConfigHandler configHandler,
@@ -123,6 +128,24 @@ namespace VattenMedia.ViewModels
             }
         }
 
+        private async void ListVideos(string channelId)
+        {
+            ChannelVideos.Clear();
+            try
+            {
+                var videos = await twitchService.GetVideos(configHandler.Config.TwitchAccessToken, channelId);
+                foreach (var video in videos.OrderByDescending(x => x.PublishedAt))
+                {
+                    ChannelVideos.Add(new Video(video.Name, video.Title, video.Game, video.Length, video.BitmapUrl, video.Url, video.PublishedAt));
+                }
+            }
+            catch (Exception e)
+            {
+                statusManager.ChangeStatusText($"Error: Failed to get videos from Twitch. Exception: {e}");
+            }
+            ChangeToVideoListView();
+        }
+
         private void ListChannels()
         {
             if (appConfiguration.TwitchEnabled && configHandler.HasTwitchAccessToken)
@@ -193,6 +216,11 @@ namespace VattenMedia.ViewModels
             configHandler.SetViewType(ViewType.Grid);
         }
 
+        private void ChangeToVideoListView()
+        {
+            StreamContentControl = VideoListControl;
+        }
+
         private void OnAddToFavoritesCommand(object selectedItem)
         {
             if (selectedItem != null && selectedItem is LiveChannel channel)
@@ -201,6 +229,31 @@ namespace VattenMedia.ViewModels
                 channel.IsFavorited = isFavorited;
                 RefreshChannelsUi();
             }
+        }
+
+        private void OnOpenVideosForChannelCommand(object selectedItem)
+        {
+            if (selectedItem != null && selectedItem is LiveChannel channel)
+            {
+                ListVideos(channel.ChannelId);
+            }
+        }
+
+        private void OnOpenVideosCommand(object _)
+        {
+            if (!UrlTextBox.Equals(ExampleUrl))
+            {
+                var channelName = UrlTextBox.Contains("/")
+                    ? UrlTextBox.Split("/").Last()
+                    : UrlTextBox;
+                ListVideosByChannelName(channelName);
+            }
+        }
+
+        private async void ListVideosByChannelName(string channelName)
+        {
+            var channelId = await twitchService.GetChannelId(configHandler.Config.TwitchAccessToken, channelName);
+            ListVideos(channelId);
         }
 
         private void OnRefreshCommand(object _ = null)

@@ -17,6 +17,7 @@ namespace VattenMedia.Models
         public Uri BitmapUrl { get; }
         public Uri Url { get; }
         public BitmapImage Image { get; private set; }
+        public string ChannelId { get; set; }
         public bool IsFavorited { get; set; }
 
         public string Description => $"{Name} ({Viewers} viewers) - {Title}";
@@ -29,6 +30,7 @@ namespace VattenMedia.Models
             string runTime,
             string bitmapUrl,
             string url,
+            string channelId,
             bool isFavorited)
         {
             Name = name;
@@ -39,6 +41,7 @@ namespace VattenMedia.Models
             BitmapUrl = string.IsNullOrWhiteSpace(bitmapUrl) ? null : new Uri(bitmapUrl);
             Url = string.IsNullOrWhiteSpace(url) ? null : new Uri(url);
             Image = GetImage();
+            ChannelId = channelId;
             IsFavorited = isFavorited;
         }
 
@@ -50,6 +53,7 @@ namespace VattenMedia.Models
                   liveChannel.RunTime,
                   liveChannel.BitmapUrl.ToString(),
                   liveChannel.Url.ToString(),
+                  liveChannel.ChannelId,
                   isFavorited)
         { }
 
