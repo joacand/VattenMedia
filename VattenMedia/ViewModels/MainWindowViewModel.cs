@@ -26,7 +26,7 @@ namespace VattenMedia.ViewModels
         private Timer statusTextTimer;
         private string statusText;
         private UserControl streamContentControl;
-        private static string ExampleUrl => "http://www.twitch.tv/channel";
+        private static string ExampleUrl => "https://www.twitch.tv/channel";
 
         public ICommand LaunchCommand => new RelayCommand(OnLaunchCommand);
         public ICommand RefreshCommand => new RelayCommand(OnRefreshCommand);
