@@ -158,7 +158,7 @@ namespace VattenMedia.Infrastructure.Services
                     {
                         string url = $"https://www.youtube.com/watch?v={videoid}";
                         int viewers = await GetViewersFromStream(videoid);
-                        var liveChannel = new LiveChannel(item?.snippet?.channelTitle, item?.snippet?.title, "N/A", 0, "", item?.snippet?.thumbnails?.medium?.url, url);
+                        var liveChannel = new LiveChannel(item?.snippet?.channelTitle, item?.snippet?.title, "N/A", 0, "", item?.snippet?.thumbnails?.medium?.url, url, item?.snippet?.channelId);
                         liveChannels.Add(liveChannel);
                     }
                 }
@@ -242,7 +242,7 @@ namespace VattenMedia.Infrastructure.Services
             tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             byte[] byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
             tokenRequest.ContentLength = byteVersion.Length;
-            using (System.IO.Stream stream = tokenRequest.GetRequestStream())
+            using (Stream stream = tokenRequest.GetRequestStream())
             {
                 await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             }

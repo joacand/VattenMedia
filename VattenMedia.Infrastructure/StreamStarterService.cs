@@ -35,7 +35,7 @@ namespace VattenMedia.Infrastructure
         {
             if (url.ToString().ToUpperInvariant().Contains("/VIDEOS/"))
             {
-                args += " --player-passthrough=hls";
+                args += " --player-passthrough=hls --hls-segment-threads 4";
             }
             return args;
         }

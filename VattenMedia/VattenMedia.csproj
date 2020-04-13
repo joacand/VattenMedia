@@ -42,6 +42,9 @@
     <Compile Update="Views\OAuthWindowView.xaml.cs">
       <DependentUpon>OAuthWindowView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\VideoListView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -55,6 +58,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\OAuthWindowView.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\VideoListView.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

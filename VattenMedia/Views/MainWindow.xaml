@@ -47,12 +47,16 @@
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition Height="auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="5,0,5,0" LastChildFill="True">
+            <DockPanel Grid.Row="0" HorizontalAlignment="Stretch" Margin="5,0,5,0">
                 <Button Command="{Binding RefreshCommand}" Padding="10,3,10,3" Content="Refresh channels"
                         Margin="0,0,5,0" Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
-                <Button Command="{Binding LaunchFromUrlCommand}" Padding="10,3,10,3" Content="Launch from URL" Margin="0,0,5,0"
+                <DockPanel Grid.Row="0" HorizontalAlignment="Right" LastChildFill="false">
+                    <TextBox Margin="0,0,5,0" FontSize="12" Text="{Binding UrlTextBox, Mode=TwoWay}" Background="{DynamicResource SBG}" Foreground="White" BorderThickness="0" VerticalContentAlignment="Center" MinWidth="170"></TextBox>
+                    <Button Command="{Binding OpenVideosCommand}" Padding="10,3,10,3" Content="Open videos" Margin="0,0,5,0"
                         Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
-                <TextBox FontSize="12" HorizontalAlignment="Stretch" Text="{Binding UrlTextBox, Mode=TwoWay}" Background="{DynamicResource SBG}" Foreground="White" BorderThickness="0"></TextBox>
+                    <Button Command="{Binding LaunchFromUrlCommand}" Padding="10,3,10,3" Content="Launch URL"
+                        Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
+                </DockPanel>
             </DockPanel>
             <DockPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="3,0,0,0" LastChildFill="False">
                 <Label DockPanel.Dock="Left" Content="Quality:" Foreground="White" Margin="0,0,5,0"></Label>
@@ -69,7 +73,7 @@
                                  Converter={StaticResource enumConverter},
                                  ConverterParameter=Low}"></RadioButton>
 
-                <Button DockPanel.Dock="Right" Command="{Binding OAuthTwitchCommand}" Padding="3" Content="OAuth Twitch" Margin="5" 
+                <Button DockPanel.Dock="Right" Command="{Binding OAuthTwitchCommand}" Padding="3" Content="OAuth Twitch" Margin="5"  MinWidth="92"
                         Background="{DynamicResource SBG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0"></Button>
                 <Button DockPanel.Dock="Right" Command="{Binding ChangeToGridViewCommand}" Padding="3" 
                          Background="{DynamicResource BG}" Foreground="White" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0">
