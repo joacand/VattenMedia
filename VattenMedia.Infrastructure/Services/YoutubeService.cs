@@ -65,7 +65,7 @@ namespace VattenMedia.Infrastructure.Services
             return await GetYoutubeLiveStreams(channelIds);
         }
 
-        public Task<IEnumerable<Video>> GetVideos(string oAthId, string channelId)
+        public Task<IEnumerable<Video>> GetVideos(string oAuthId, string channelId)
         {
             return Task.FromResult<IEnumerable<Video>>(new List<Video>());
         }
@@ -263,6 +263,11 @@ namespace VattenMedia.Infrastructure.Services
                 configHandler.SetYoutubeAccessToken(accessToken);
                 return accessToken;
             }
+        }
+
+        public Task<string> GetChannelId(string oAuth, string channelName)
+        {
+            throw new NotImplementedException();
         }
 
         #region Crypto functions

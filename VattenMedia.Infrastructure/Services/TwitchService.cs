@@ -1,6 +1,7 @@
 ﻿using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Entities.Twitch;
@@ -61,6 +62,21 @@ namespace VattenMedia.Infrastructure.Services
                 return Task.FromResult(url.Split(new string[] { "access_token=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0]);
             }
             return null;
+        }
+
+        public async Task<string> GetChannelId(string oAuthId, string channelName)
+        {
+            var requestUrl = baseUrl + $"kraken/users?login={channelName}";
+            var request = new RestRequest(requestUrl, Method.GET);
+            request.AddHeader("Accept", "application/vnd.twitchtv.v5+json");
+            request.AddHeader("Client-ID", clientId);
+            request.AddHeader("Authorization", $"OAuth {oAuthId}");
+
+            var response = await client.ExecuteTaskAsync<TwitchChannelRootResponse>(request);
+
+            return response.Data.users.Count > 0
+                ? response.Data.users.First()._id
+                : null;
         }
 
         private IEnumerable<LiveChannel> CreateChannels(TwitchStreamsRootResponse inChannels)

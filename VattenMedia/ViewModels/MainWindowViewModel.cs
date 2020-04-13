@@ -36,6 +36,7 @@ namespace VattenMedia.ViewModels
         public ICommand ChangeToGridViewCommand => new RelayCommand(OnChangeToGridViewCommand);
         public ICommand AddToFavoritesCommand => new RelayCommand(OnAddToFavoritesCommand);
         public ICommand OpenVideosForChannelCommand => new RelayCommand(OnOpenVideosForChannelCommand);
+        public ICommand OpenVideosCommand => new RelayCommand(OnOpenVideosCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
         public ObservableCollection<Video> ChannelVideos { get; private set; } = new ObservableCollection<Video>();
@@ -236,6 +237,23 @@ namespace VattenMedia.ViewModels
             {
                 ListVideos(channel.ChannelId);
             }
+        }
+
+        private void OnOpenVideosCommand(object _)
+        {
+            if (!UrlTextBox.Equals(ExampleUrl))
+            {
+                var channelName = UrlTextBox.Contains("/")
+                    ? UrlTextBox.Split("/").Last()
+                    : UrlTextBox;
+                ListVideosByChannelName(channelName);
+            }
+        }
+
+        private async void ListVideosByChannelName(string channelName)
+        {
+            var channelId = await twitchService.GetChannelId(configHandler.Config.TwitchAccessToken, channelName);
+            ListVideos(channelId);
         }
 
         private void OnRefreshCommand(object _ = null)
