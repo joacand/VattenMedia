@@ -32,7 +32,7 @@
                     <MenuItem Header="Toggle Favorite"
                               Command="{Binding Path=AddToFavoritesCommand}"
                               CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
-                    <MenuItem Header="Channel videos"
+                    <MenuItem Header="Open videos"
                               Command="{Binding Path=OpenVideosForChannelCommand}"
                               CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
                 </ContextMenu>
