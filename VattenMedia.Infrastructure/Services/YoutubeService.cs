@@ -65,11 +65,6 @@ namespace VattenMedia.Infrastructure.Services
             return await GetYoutubeLiveStreams(channelIds);
         }
 
-        public Task<IEnumerable<Video>> GetVideos(string oAuthId, string channelId)
-        {
-            return Task.FromResult<IEnumerable<Video>>(new List<Video>());
-        }
-
         private async Task<List<ChannelId>> GetSubscriptionChannelIds(string oAuthId)
         {
             var channelIds = new List<ChannelId>();
@@ -247,7 +242,7 @@ namespace VattenMedia.Infrastructure.Services
             tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
             byte[] byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
             tokenRequest.ContentLength = byteVersion.Length;
-            using (System.IO.Stream stream = tokenRequest.GetRequestStream())
+            using (Stream stream = tokenRequest.GetRequestStream())
             {
                 await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             }
@@ -263,11 +258,6 @@ namespace VattenMedia.Infrastructure.Services
                 configHandler.SetYoutubeAccessToken(accessToken);
                 return accessToken;
             }
-        }
-
-        public Task<string> GetChannelId(string oAuth, string channelName)
-        {
-            throw new NotImplementedException();
         }
 
         #region Crypto functions

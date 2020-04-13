@@ -8,8 +8,6 @@ namespace VattenMedia.Core.Interfaces
     {
         string OAuthUrl { get; }
         Task<IEnumerable<LiveChannel>> GetLiveChannels(string oAuthId);
-        Task<IEnumerable<Video>> GetVideos(string oAuthId, string channelId);
         Task<string> GetAuthIdFromUrl(string url);
-        Task<string> GetChannelId(string oAuthId, string channelName);
     }
 }
