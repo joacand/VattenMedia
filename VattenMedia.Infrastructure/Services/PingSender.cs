@@ -40,7 +40,6 @@ namespace VattenMedia.Infrastructure.Services
                 cancellationTokenSource.Cancel();
                 cancellationTokenSource.Dispose();
             }
-            pingSender.Abort();
         }
 
         public void Run()

@@ -35,6 +35,9 @@
                     <MenuItem Header="Open videos"
                               Command="{Binding Path=OpenVideosForChannelCommand}"
                               CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
+                    <MenuItem Header="Open chat"
+                              Command="{Binding Path=OpenChatCommand}"
+                              CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ContextMenu}}, Path=PlacementTarget.SelectedItem}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.Resources>
