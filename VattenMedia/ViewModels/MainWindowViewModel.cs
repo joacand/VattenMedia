@@ -37,6 +37,7 @@ namespace VattenMedia.ViewModels
         public ICommand AddToFavoritesCommand => new RelayCommand(OnAddToFavoritesCommand);
         public ICommand OpenVideosForChannelCommand => new RelayCommand(OnOpenVideosForChannelCommand);
         public ICommand OpenVideosCommand => new RelayCommand(OnOpenVideosCommand);
+        public ICommand OpenChatCommand => new RelayCommand(OnOpenChatCommand);
 
         public ObservableCollection<LiveChannel> LiveChannels { get; private set; } = new ObservableCollection<LiveChannel>();
         public ObservableCollection<Video> ChannelVideos { get; private set; } = new ObservableCollection<Video>();
@@ -47,6 +48,7 @@ namespace VattenMedia.ViewModels
         public UserControl StreamGridControl { get; set; }
         public UserControl StreamListControl { get; set; }
         public UserControl VideoListControl { get; set; }
+        public ChatViewModel ChatViewModel { get; set; }
 
         public MainWindowViewModel(
             IConfigHandler configHandler,
@@ -248,6 +250,33 @@ namespace VattenMedia.ViewModels
                     : UrlTextBox;
                 ListVideosByChannelName(channelName);
             }
+        }
+
+        private void OnOpenChatCommand(object selectedItem)
+        {
+            if (selectedItem != null && selectedItem is LiveChannel channel)
+            {
+                OpenChat(channel.Name);
+            }
+        }
+
+        private void OpenChat(string channelName)
+        {
+            if (string.IsNullOrEmpty(configHandler.Config.TwitchAccessToken))
+            {
+                ChangeStatusText("Access token missing - cannot open chat");
+                return;
+            }
+            if (string.IsNullOrEmpty(configHandler.Config.TwitchUsername))
+            {
+                ChangeStatusText("Username is missing - cannot open chat");
+                return;
+            }
+
+            var chatWindow = new ChatView { DataContext = ChatViewModel };
+            chatWindow.Initialize();
+            chatWindow.StartChat(configHandler.Config.TwitchUsername, channelName, configHandler.Config.TwitchAccessToken);
+            chatWindow.Show();
         }
 
         private async void ListVideosByChannelName(string channelName)
