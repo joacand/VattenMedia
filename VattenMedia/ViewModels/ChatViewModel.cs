@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Data;
 using VattenMedia.Core.Interfaces;
+using VattenMedia.Models;
 
 namespace VattenMedia.ViewModels
 {
@@ -16,16 +18,25 @@ namespace VattenMedia.ViewModels
         private bool pollingActive;
         private string channelName;
 
-        private readonly object _chatMessagesLock = new object();
-        private ObservableCollection<string> _chatMessages;
+        private readonly object chatMessagesLock = new object();
+        private ObservableCollection<ChatMessage> chatMessages;
+        private Dictionary<string, string> UsernameToColor { get; } = new Dictionary<string, string>();
 
-        public ObservableCollection<string> ChatMessages {
+        private static readonly string[] usernameColorOptions = new string[]
+        {
+            "#FF0000", "#0000FF", "#008000", "#B22222", "#FF7F50", "#9ACD32", "#FF4500",
+            "#2E8B57", "#DAA520", "#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"
+        };
+
+        private Random Random { get; } = new Random();
+
+        public ObservableCollection<ChatMessage> ChatMessages {
             get {
-                return _chatMessages;
+                return chatMessages;
             }
             set {
-                _chatMessages = value;
-                BindingOperations.EnableCollectionSynchronization(_chatMessages, _chatMessagesLock);
+                chatMessages = value;
+                BindingOperations.EnableCollectionSynchronization(chatMessages, chatMessagesLock);
             }
         }
 
@@ -33,7 +44,7 @@ namespace VattenMedia.ViewModels
         {
             this.twitchChatClient = twitchChatClient;
 
-            ChatMessages = new ObservableCollection<string>();
+            ChatMessages = new ObservableCollection<ChatMessage>();
         }
 
         public void StartChat(string userName, string channelName, string twitchAccessToken)
@@ -64,9 +75,21 @@ namespace VattenMedia.ViewModels
             if (message.Contains($"privmsg #{channelName}", StringComparison.OrdinalIgnoreCase))
             {
                 var username = message.Split("!").First().Substring(1);
-                var strippedMessage = Regex.Split(message, $"privmsg #{channelName}", RegexOptions.IgnoreCase).Last();
-                ChatMessages.Add($"{username}: {strippedMessage}");
+                string usernameColor = GetUsernameColor(username);
+                var strippedMessage = ": " + Regex.Split(message, $"privmsg #{channelName} :", RegexOptions.IgnoreCase).Last();
+                ChatMessages.Add(new ChatMessage { DateTime = DateTime.Now, Username = username, UsernameColor = usernameColor, Message = strippedMessage });
             }
+        }
+
+        private string GetUsernameColor(string username)
+        {
+            if (!UsernameToColor.ContainsKey(username))
+            {
+                var randColorInd = Random.Next(0, usernameColorOptions.Length);
+                var newColor = usernameColorOptions[randColorInd];
+                UsernameToColor.Add(username, newColor);
+            }
+            return UsernameToColor[username];
         }
 
         internal void OnWindowClosing(object sender, CancelEventArgs e)
