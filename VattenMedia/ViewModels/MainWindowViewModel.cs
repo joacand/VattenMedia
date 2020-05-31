@@ -267,6 +267,11 @@ namespace VattenMedia.ViewModels
                 ChangeStatusText("Access token missing - cannot open chat");
                 return;
             }
+            if (string.IsNullOrEmpty(configHandler.Config.TwitchUsername))
+            {
+                ChangeStatusText("Username is missing - cannot open chat");
+                return;
+            }
 
             var chatWindow = new ChatView { DataContext = ChatViewModel };
             chatWindow.Initialize();

@@ -37,7 +37,7 @@
 
                 <TextBlock Text="{Binding DateTime, StringFormat='HH:mm:ss'}" Grid.Column="0" Foreground="#DEDEE3" FontWeight="Bold" Margin="5,0,5,0"/>
                 <TextBlock Text="{Binding Username}" Grid.Column="1" Foreground="{Binding UsernameColor}" FontWeight="Bold"/>
-                <TextBox Background="Transparent" BorderThickness="0" Grid.Column="2" Foreground="#DEDEE3" Text="{Binding Message, Mode=OneWay" IsReadOnly="True" TextWrapping="Wrap"/>
+                <TextBox Background="Transparent" BorderThickness="0" Grid.Column="2" Foreground="#DEDEE3" Text="{Binding Message, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap"/>
             </Grid>
         </DataTemplate>
     </Window.Resources>
