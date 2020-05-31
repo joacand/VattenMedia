@@ -275,7 +275,7 @@ namespace VattenMedia.ViewModels
 
             var chatWindow = new ChatView { DataContext = ChatViewModel };
             chatWindow.Initialize();
-            chatWindow.StartChat("tbtvitu", channelName, configHandler.Config.TwitchAccessToken);
+            chatWindow.StartChat(configHandler.Config.TwitchUsername, channelName, configHandler.Config.TwitchAccessToken);
             chatWindow.Show();
         }
 
