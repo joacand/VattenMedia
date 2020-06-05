@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Sockets;
+using System.Text.RegularExpressions;
+using VattenMedia.Core.Entities;
 using VattenMedia.Core.Exceptions;
 using VattenMedia.Core.Interfaces;
 
@@ -19,6 +23,16 @@ namespace VattenMedia.Infrastructure.Services
         private static string Address => "irc.twitch.tv";
         private static int Port => 6667;
         private static int PingInterval => 5 * 60 * 1000; // 5 minutes
+
+        private Dictionary<string, string> UsernameToColor { get; } = new Dictionary<string, string>();
+
+        private static readonly string[] usernameColorOptions = new string[]
+        {
+            "#FF0000", "#0000FF", "#008000", "#B22222", "#FF7F50", "#9ACD32", "#FF4500",
+            "#2E8B57", "#DAA520", "#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"
+        };
+
+        private Random Random { get; } = new Random();
 
         public TwitchChatClient()
         {
@@ -67,7 +81,7 @@ namespace VattenMedia.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                return $"Exception when receiving message: {ex}";
+                throw new ChatViewerException($"Exception when receiving message: {ex}");
             }
         }
 
@@ -82,6 +96,29 @@ namespace VattenMedia.Infrastructure.Services
             {
                 throw new ChatViewerException($"Exception when sending IRC message: {ex}");
             }
+        }
+
+        public ChatMessage FormatMessage(string message, string channelName)
+        {
+            if (message.IndexOf($"privmsg #{channelName}", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                var username = message.Split('!').First().Substring(1);
+                var usernameColor = GetUsernameColor(username);
+                var strippedMessage = ": " + Regex.Split(message, $"privmsg #{channelName} :", RegexOptions.IgnoreCase).Last();
+                return new ChatMessage { DateTime = DateTime.Now, Username = username, UsernameColor = usernameColor, Message = strippedMessage };
+            }
+            return ChatMessage.Empty();
+        }
+
+        private string GetUsernameColor(string username)
+        {
+            if (!UsernameToColor.ContainsKey(username))
+            {
+                var randColorInd = Random.Next(0, usernameColorOptions.Length);
+                var newColor = usernameColorOptions[randColorInd];
+                UsernameToColor.Add(username, newColor);
+            }
+            return UsernameToColor[username];
         }
     }
 }

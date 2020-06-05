@@ -1,4 +1,6 @@
-﻿namespace VattenMedia.Core.Interfaces
+﻿using VattenMedia.Core.Entities;
+
+namespace VattenMedia.Core.Interfaces
 {
     public interface IChatClient
     {
@@ -12,5 +14,7 @@
         string ReadMessage();
 
         void SendIrcMessage(string message);
+
+        ChatMessage FormatMessage(string message, string channelName);
     }
 }
