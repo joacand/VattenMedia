@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Text.RegularExpressions;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Exceptions;
@@ -24,15 +24,13 @@ namespace VattenMedia.Infrastructure.Services
         private static int Port => 6667;
         private static int PingInterval => 5 * 60 * 1000; // 5 minutes
 
-        private Dictionary<string, string> UsernameToColor { get; } = new Dictionary<string, string>();
-
         private static readonly string[] usernameColorOptions = new string[]
         {
             "#FF0000", "#0000FF", "#008000", "#B22222", "#FF7F50", "#9ACD32", "#FF4500",
             "#2E8B57", "#DAA520", "#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"
         };
 
-        private Random Random { get; } = new Random();
+        private static Crc32 Crc32 { get; } = new Crc32();
 
         public TwitchChatClient()
         {
@@ -112,13 +110,9 @@ namespace VattenMedia.Infrastructure.Services
 
         private string GetUsernameColor(string username)
         {
-            if (!UsernameToColor.ContainsKey(username))
-            {
-                var randColorInd = Random.Next(0, usernameColorOptions.Length);
-                var newColor = usernameColorOptions[randColorInd];
-                UsernameToColor.Add(username, newColor);
-            }
-            return UsernameToColor[username];
+            var crc32Result = Crc32.Get(Encoding.ASCII.GetBytes(username));
+            var colorIndex = crc32Result % usernameColorOptions.Length;
+            return usernameColorOptions[colorIndex];
         }
     }
 }
