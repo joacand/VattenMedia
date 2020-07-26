@@ -1,6 +1,7 @@
 ﻿using Unity;
 using Unity.Lifetime;
 using VattenMedia.Core.Interfaces;
+using VattenMedia.Infrastructure.Factories;
 using VattenMedia.Infrastructure.Services;
 
 namespace VattenMedia.Infrastructure.Extensions
@@ -14,7 +15,7 @@ namespace VattenMedia.Infrastructure.Extensions
             container.RegisterType<IStatusManager, StatusManager>(new ContainerControlledLifetimeManager());
             container.RegisterType<ITwitchService, TwitchService>();
             container.RegisterType<IYoutubeService, YoutubeService>();
-            container.RegisterType<ITwitchChatClient, TwitchChatClient>();
+            container.RegisterType<ITwitchChatClientFactory, TwitchChatClientFactory>();
         }
     }
 }

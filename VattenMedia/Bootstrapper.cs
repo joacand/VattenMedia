@@ -2,6 +2,7 @@
 using Unity;
 using Unity.Lifetime;
 using VattenMedia.Core.Entities;
+using VattenMedia.Factories;
 using VattenMedia.Infrastructure.Extensions;
 
 namespace VattenMedia
@@ -10,6 +11,7 @@ namespace VattenMedia
     {
         public static void AddRegistrations(this IUnityContainer container)
         {
+            container.RegisterType<IViewModelFactory, ViewModelFactory>();
             container.AddInfrastructureRegistrations();
             container.RegisterInstance(CreateAppConfiguration(), new ContainerControlledLifetimeManager());
         }

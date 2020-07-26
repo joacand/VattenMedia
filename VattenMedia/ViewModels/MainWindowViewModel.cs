@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Interfaces;
+using VattenMedia.Factories;
 using VattenMedia.Models;
 using VattenMedia.Views;
 using LiveChannel = VattenMedia.Models.LiveChannel;
@@ -16,6 +17,7 @@ namespace VattenMedia.ViewModels
 {
     internal class MainWindowViewModel : BaseViewModel
     {
+        private readonly IViewModelFactory viewModelFactory;
         private readonly IConfigHandler configHandler;
         private readonly ITwitchService twitchService;
         private readonly IYoutubeService youtubeService;
@@ -48,9 +50,9 @@ namespace VattenMedia.ViewModels
         public UserControl StreamGridControl { get; set; }
         public UserControl StreamListControl { get; set; }
         public UserControl VideoListControl { get; set; }
-        public ChatViewModel ChatViewModel { get; set; }
 
         public MainWindowViewModel(
+            IViewModelFactory viewModelFactory,
             IConfigHandler configHandler,
             ITwitchService twitchService,
             IYoutubeService youtubeService,
@@ -58,6 +60,7 @@ namespace VattenMedia.ViewModels
             IStreamStarterService streamStarterService,
             AppConfiguration appConfiguration)
         {
+            this.viewModelFactory = viewModelFactory;
             this.configHandler = configHandler;
             this.twitchService = twitchService;
             this.youtubeService = youtubeService;
@@ -65,7 +68,6 @@ namespace VattenMedia.ViewModels
             statusManager.SetCallback(ChangeStatusText);
             this.streamStarterService = streamStarterService;
             this.appConfiguration = appConfiguration;
-
             streamStarterService.RunningProcessesChanged +=
                 (s, e) => { RunningProcessesChangedHandler(e); };
             ListChannels();
@@ -272,8 +274,7 @@ namespace VattenMedia.ViewModels
                 ChangeStatusText("Username is missing - cannot open chat");
                 return;
             }
-
-            var chatWindow = new ChatView { DataContext = ChatViewModel };
+            var chatWindow = new ChatView { DataContext = viewModelFactory.CreateChatViewModel() };
             chatWindow.Initialize();
             chatWindow.StartChat(configHandler.Config.TwitchUsername, channelName, configHandler.Config.TwitchAccessToken);
             chatWindow.Show();
@@ -309,16 +310,13 @@ namespace VattenMedia.ViewModels
 
         private List<string> GetQualityFromRadioButtons()
         {
-            switch (SelectedQuality)
+            return SelectedQuality switch
             {
-                case Quality.High:
-                    return QualityOptions.HighQuality;
-                case Quality.Medium:
-                    return QualityOptions.MediumQuality;
-                case Quality.Low:
-                    return QualityOptions.LowQuality;
-            }
-            throw new ArgumentOutOfRangeException(nameof(SelectedQuality));
+                Quality.High => QualityOptions.HighQuality,
+                Quality.Medium => QualityOptions.MediumQuality,
+                Quality.Low => QualityOptions.LowQuality,
+                _ => throw new ArgumentOutOfRangeException(nameof(SelectedQuality)),
+            };
         }
     }
 }
