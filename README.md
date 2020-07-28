@@ -12,10 +12,16 @@ The software is designed to be used together with `streamlink` (recommended) or 
 * Launch the program and press the `OAuth` button to perform OAuth authentication
 * Press `Launch` on the stream you want to watch
 
+## Additional functionality
+
+* Right click a channel to access functionality such as viewing VODs or reading the channel chat
+
 ## Screenshots
 
-Here is an example of how it looks like with list and grid view:
+Here is an example of how it looks:
 
 ![alt tag](https://i.imgur.com/XFjwsyS.png "Example usage of the application in list view")
 
 ![alt tag](https://i.imgur.com/NwUMXsA.png "Example usage of the application in grid view")
+
+![alt tag](https://i.imgur.com/R9r2rKe.png "Example usage of channel chat viewer")
