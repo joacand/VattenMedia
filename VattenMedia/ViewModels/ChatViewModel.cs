@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Interfaces;
@@ -11,9 +13,11 @@ namespace VattenMedia.ViewModels
     internal class ChatViewModel : BaseViewModel
     {
         private readonly ITwitchChatClient twitchChatClient;
+        private readonly ITwitchEmotesService twitchEmotesService;
         private Thread chatPoller;
         private bool pollingActive;
         private string channelName;
+        private string channelId;
         private string chatViewTitle;
         private ObservableCollection<ChatMessage> chatMessages;
         private readonly object chatMessagesLock = new object();
@@ -28,17 +32,20 @@ namespace VattenMedia.ViewModels
             }
         }
 
-        public ChatViewModel(ITwitchChatClient twitchChatClient)
+        public ChatViewModel(ITwitchChatClient twitchChatClient, ITwitchEmotesService twitchEmotesService)
         {
             this.twitchChatClient = twitchChatClient;
+            this.twitchEmotesService = twitchEmotesService;
 
             ChatMessages = new ObservableCollection<ChatMessage>();
         }
 
-        public void StartChat(string userName, string channelName, string twitchAccessToken)
+        public void StartChat(string userName, string channelName, string channelId, string twitchAccessToken)
         {
             SetTitle(channelName);
             this.channelName = channelName;
+            this.channelId = channelId;
+            Task.Run(async () => await twitchEmotesService.LoadChannelEmotes(channelId));
             ChatMessages.Clear();
             twitchChatClient.Start(userName, twitchAccessToken, channelName);
 
@@ -67,6 +74,7 @@ namespace VattenMedia.ViewModels
                 try
                 {
                     var message = twitchChatClient.ReadMessage();
+                    message = AddEmotes(message);
                     AddChatMessage(message);
                 }
                 catch (Exception ex)
@@ -74,6 +82,16 @@ namespace VattenMedia.ViewModels
                     ChatMessages.Add(ChatMessage.ExceptionMessage(ex));
                 }
             }
+        }
+
+        private string AddEmotes(string message)
+        {
+            var emoteResult = twitchEmotesService.CheckForEmotes(channelId, message);
+
+            if (emoteResult.Any())
+            ;
+
+            return message;
         }
 
         private void AddChatMessage(string message)

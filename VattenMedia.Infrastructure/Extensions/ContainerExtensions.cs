@@ -16,6 +16,7 @@ namespace VattenMedia.Infrastructure.Extensions
             container.RegisterType<ITwitchService, TwitchService>();
             container.RegisterType<IYoutubeService, YoutubeService>();
             container.RegisterType<ITwitchChatClientFactory, TwitchChatClientFactory>();
+            container.RegisterType<ITwitchEmotesService, TwitchEmotesService>();
         }
     }
 }

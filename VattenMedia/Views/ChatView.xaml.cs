@@ -22,9 +22,9 @@ namespace VattenMedia.Views
             Closing += Context.OnWindowClosing;
         }
 
-        internal void StartChat(string userName, string channelName, string twitchAccessToken)
+        internal void StartChat(string userName, string channelName, string channelId, string twitchAccessToken)
         {
-            Context.StartChat(userName, channelName, twitchAccessToken);
+            Context.StartChat(userName, channelName, channelId, twitchAccessToken);
         }
 
         private void ScrollViewer_ScrollChanged(object _, ScrollChangedEventArgs e)

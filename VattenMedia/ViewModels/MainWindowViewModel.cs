@@ -258,11 +258,11 @@ namespace VattenMedia.ViewModels
         {
             if (selectedItem != null && selectedItem is LiveChannel channel)
             {
-                OpenChat(channel.Name);
+                OpenChat(channel.Name, channel.ChannelId);
             }
         }
 
-        private void OpenChat(string channelName)
+        private void OpenChat(string channelName, string channelId)
         {
             if (string.IsNullOrEmpty(configHandler.Config.TwitchAccessToken))
             {
@@ -276,7 +276,7 @@ namespace VattenMedia.ViewModels
             }
             var chatWindow = new ChatView { DataContext = viewModelFactory.CreateChatViewModel() };
             chatWindow.Initialize();
-            chatWindow.StartChat(configHandler.Config.TwitchUsername, channelName, configHandler.Config.TwitchAccessToken);
+            chatWindow.StartChat(configHandler.Config.TwitchUsername, channelName, channelId, configHandler.Config.TwitchAccessToken);
             chatWindow.Show();
         }
 
