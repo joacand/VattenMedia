@@ -12,6 +12,20 @@
         <SolidColorBrush x:Key="SBG" Color="#232031"></SolidColorBrush>
         <converters:EnumMatchToBooleanConverter x:Key="enumConverter" />
         <converters:BoolToStringConverter x:Key="booleanToStringConverter" FalseValue="" TrueValue="★" />
+        <Canvas x:Key="PlayIcon" x:Shared="false" Name="PlayIcon" Width="17" Height="17">
+            <Path Fill="White">
+                <Path.Data>
+                    <PathGeometry Figures="M5 17.066V2.934a.5.5 0 01.777-.416L17 10 5.777 17.482A.5.5 0 015 17.066z" FillRule="Nonzero"/>
+                </Path.Data>
+            </Path>
+        </Canvas>
+        <Canvas x:Key="ChatIcon" x:Shared="false" Name="ChatIcon" Width="17" Height="17">
+            <Path Fill="White">
+                <Path.Data>
+                    <PathGeometry Figures="M7.828 13L10 15.172 12.172 13H15V5H5v8h2.828zM10 18l-3-3H5a2 2 0 01-2-2V5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2l-3 3z" FillRule="Nonzero"></PathGeometry>
+                </Path.Data>
+            </Path>
+        </Canvas>
     </UserControl.Resources>
     <Grid>
         <DataGrid ItemsSource="{Binding LiveChannels}"
@@ -120,15 +134,34 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Width=".3*"  Header="" IsReadOnly="True">
+                <DataGridTemplateColumn Width=".15*"  Header="" IsReadOnly="True">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.OpenChatCommand}"
+                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=SelectedItem}"
+                                    Background="{DynamicResource SBG}"
+                                    Foreground="White" Width="200" Height="200"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+                                    BorderThickness="0">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <ContentControl Content="{StaticResource ChatIcon}"></ContentControl>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Width=".15*"  Header="" IsReadOnly="True">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Command="{Binding Path=DataContext.LaunchCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
                                     CommandParameter="{Binding Url}"
-                                    Content="Launch"
                                     Background="{DynamicResource SBG}"
-                                    Foreground="White" Width="1000" Height="1000"
-                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" BorderThickness="0">
+                                    Foreground="White" Width="200" Height="200"
+                                    Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" 
+                                    BorderThickness="0">
+                                <Grid HorizontalAlignment="Stretch">
+                                    <ContentControl Content="{StaticResource PlayIcon}"></ContentControl>
+                                </Grid>
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
