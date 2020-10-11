@@ -183,14 +183,29 @@ namespace VattenMedia.ViewModels
 
         private void OnLaunchCommand(object uri)
         {
-            StartStream((Uri)uri);
+            try
+            {
+                StartStream((Uri)uri);
+            }
+            catch (Exception ex)
+            {
+                ChangeStatusText($"Failed to launch stream - {ex}");
+            }
         }
 
         private void OnLaunchFromUrlCommand(object _)
         {
-            if (!UrlTextBox.Equals(ExampleUrl))
+            if (UrlTextBox.Equals(ExampleUrl))
+            {
+                return;
+            }
+            try
             {
                 StartStream(new Uri(UrlTextBox));
+            }
+            catch (Exception ex)
+            {
+                ChangeStatusText($"Failed to launch from URL - {ex}");
             }
         }
 
