@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Description>A desktop client for watching Twitch streams using a third party streaming utility</Description>
