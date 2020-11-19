@@ -1,13 +1,13 @@
 ﻿using System;
 using VattenMedia.Core.Interfaces;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Infrastructure.Services
 {
-    internal class StatusManager : IStatusManager
+    internal class StatusTextService : IStatusTextService
     {
         private Action<string, TimeSpan?> changeStatus;
 
-        public StatusManager()
+        public StatusTextService()
         {
         }
 

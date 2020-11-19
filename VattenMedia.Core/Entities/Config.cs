@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System.Collections.Generic;
 
 namespace VattenMedia.Core.Entities
 {
@@ -15,6 +17,7 @@ namespace VattenMedia.Core.Entities
         public string YoutubeToken { get; set; } = string.Empty;
         public string YoutubeRefreshToken { get; set; } = string.Empty;
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public ViewType View { get; set; } = ViewType.List;
         public HashSet<string> FavoritedStreams { get; set; } = new HashSet<string>();
     }

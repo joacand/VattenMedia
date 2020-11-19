@@ -4,17 +4,17 @@ using System.Diagnostics;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Interfaces;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Infrastructure.Services
 {
     internal class StreamStarterService : IStreamStarterService
     {
         private readonly AppConfiguration appConfiguration;
-        private readonly IStatusManager statusManager;
+        private readonly IStatusTextService statusManager;
         private int runningProcesses;
 
         public event EventHandler<int> RunningProcessesChanged;
 
-        public StreamStarterService(IStatusManager statusManager, AppConfiguration appConfiguration)
+        public StreamStarterService(IStatusTextService statusManager, AppConfiguration appConfiguration)
         {
             this.statusManager = statusManager;
             this.appConfiguration = appConfiguration;
@@ -23,7 +23,8 @@ namespace VattenMedia.Infrastructure
         public void StartStream(Uri url, List<string> qualityOptions)
         {
             var process = appConfiguration.StreamUtilityPath;
-            var args = $@" {url} {string.Join(",", qualityOptions)} --no-version-check --config {appConfiguration.StreamUtilityRcPath}";
+            var userArgs = appConfiguration.StreamStarterOptionalCommandLineArguments.Split(',');
+            var args = $@" {url} {string.Join(",", qualityOptions)} {string.Join(' ', userArgs)} --config {appConfiguration.StreamUtilityRcPath}";
             args = SetArgsIfVod(args, url);
             StartProcess(process, args);
         }

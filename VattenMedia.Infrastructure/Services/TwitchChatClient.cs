@@ -17,7 +17,7 @@ namespace VattenMedia.Infrastructure.Services
         private TcpClient _tcpClient;
         private StreamReader _inputStream;
         private StreamWriter _outputStream;
-        private PingSender _pingSender;
+        private readonly PingSender _pingSender;
         private bool _started;
 
         private static string Address => "irc.twitch.tv";
@@ -30,7 +30,7 @@ namespace VattenMedia.Infrastructure.Services
             "#2E8B57", "#DAA520", "#5F9EA0", "#1E90FF", "#FF69B4", "#8A2BE2", "#00FF7F"
         };
 
-        private static Crc32 Crc32 { get; } = new Crc32();
+        private static Util.Crc32 Crc32 { get; } = new Util.Crc32();
 
         public TwitchChatClient()
         {
@@ -100,7 +100,7 @@ namespace VattenMedia.Infrastructure.Services
         {
             if (message.IndexOf($"privmsg #{channelName}", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                var username = message.Split('!').First().Substring(1);
+                var username = message.Split('!').First()[1..];
                 var usernameColor = GetUsernameColor(username);
                 var strippedMessage = ": " + Regex.Split(message, $"privmsg #{channelName} :", RegexOptions.IgnoreCase).Last();
                 return new ChatMessage { DateTime = DateTime.Now, Username = username, UsernameColor = usernameColor, Message = strippedMessage };

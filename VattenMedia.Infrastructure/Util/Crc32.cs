@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Infrastructure.Util
 {
     /// <summary>
     /// Performs 32-bit reversed cyclic redundancy checks.
     /// 
     /// Code from https://rosettacode.org/wiki/CRC-32#C.23
     /// </summary>
-    public class Crc32
+    internal class Crc32
     {
         #region Constants
         /// <summary>

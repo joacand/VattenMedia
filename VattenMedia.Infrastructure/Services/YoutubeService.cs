@@ -50,7 +50,7 @@ namespace VattenMedia.Infrastructure.Services
             code_verifier = RandomDataBase64url(32);
             code_challenge = Base64urlencodeNoPadding(Sha256(code_verifier));
 
-            string youtubeAuthScope = "https://www.googleapis.com/auth/youtube.readonly";
+            var youtubeAuthScope = "https://www.googleapis.com/auth/youtube.readonly";
             OAuthUrl = $"{authorizationEndpoint}?response_type=code&scope={youtubeAuthScope}&redirect_uri=" +
                     $"{redirectUrl}&client_id={clientId}&state={state}&code_challenge={code_challenge}" +
                     $"&code_challenge_method={code_challenge_method}";
@@ -68,8 +68,8 @@ namespace VattenMedia.Infrastructure.Services
         private async Task<List<ChannelId>> GetSubscriptionChannelIds(string oAuthId)
         {
             var channelIds = new List<ChannelId>();
-            bool pageNotDone = true;
-            bool refreshedToken = false;
+            var pageNotDone = true;
+            var refreshedToken = false;
             string pageToken = null;
 
             while (pageNotDone)
@@ -84,7 +84,7 @@ namespace VattenMedia.Infrastructure.Services
                 var request = new RestRequest(requestUrl, Method.GET);
                 request.AddHeader("Authorization", $"Bearer {oAuthId}");
 
-                var response = await client.ExecuteTaskAsync<YoutubeRootResponse>(request);
+                var response = await client.ExecuteAsync<YoutubeRootResponse>(request);
 
                 if (!response.IsSuccessful && response.StatusCode == HttpStatusCode.Unauthorized)
                 {
@@ -122,13 +122,13 @@ namespace VattenMedia.Infrastructure.Services
 
         private async Task<IEnumerable<LiveChannel>> GetYoutubeLiveStreams(List<ChannelId> channelIds)
         {
-            ConcurrentBag<LiveChannel> youtubeLiveStreams = new ConcurrentBag<LiveChannel>();
+            var youtubeLiveStreams = new ConcurrentBag<LiveChannel>();
 
             await Task.Run(() =>
             {
                 Parallel.ForEach(channelIds, (channelId) =>
                 {
-                    List<LiveChannel> channelLiveStreams = GetLiveStreamsFromId(channelId).Result;
+                    var channelLiveStreams = GetLiveStreamsFromId(channelId).Result;
 
                     foreach (var channelLiveStream in channelLiveStreams)
                     {
@@ -146,18 +146,17 @@ namespace VattenMedia.Infrastructure.Services
             var requestUrl = $"{youtubeSearchEndpoint}?part=snippet&channelId={channelId}&eventType=live&maxResults=25&type=video&key={youtubeApiKey}";
             var request = new RestRequest(requestUrl, Method.GET);
 
-            var response = await client.ExecuteTaskAsync<Core.Entities.YoutubeSearch.YoutubeSearchRoot>(request);
+            var response = await client.ExecuteAsync<Core.Entities.YoutubeSearch.YoutubeSearchRoot>(request);
             var data = response?.Data;
 
             if (data?.items != null)
             {
                 foreach (var item in data.items)
                 {
-                    string videoid = item?.id?.videoId;
+                    var videoid = item?.id?.videoId;
                     if (!string.IsNullOrWhiteSpace(videoid))
                     {
-                        string url = $"https://www.youtube.com/watch?v={videoid}";
-                        int viewers = await GetViewersFromStream(videoid);
+                        var url = $"https://www.youtube.com/watch?v={videoid}";
                         var liveChannel = new LiveChannel(item?.snippet?.channelTitle, item?.snippet?.title, "N/A", 0, "", item?.snippet?.thumbnails?.medium?.url, url, item?.snippet?.channelId);
                         liveChannels.Add(liveChannel);
                     }
@@ -167,20 +166,9 @@ namespace VattenMedia.Infrastructure.Services
             return liveChannels;
         }
 
-        private Task<int> GetViewersFromStream(string videoid)
-        {
-            // TODO:
-            return Task.FromResult(0);
-            /*
-            var requestUrl = $"{youtubeVideosEndpoint}?part=liveStreamingDetails&id={channelId}&key={youtubeApiKey}";
-
-            var request = new RestRequest(requestUrl, Method.GET);
-            */
-        }
-
         public async Task<string> GetAuthIdFromUrl(string url)
         {
-            string code = "";
+            var code = string.Empty;
             if (url.Contains("code="))
             {
                 code = url.Split(new string[] { "code=" }, StringSplitOptions.None)[1].Split(new string[] { "&" }, StringSplitOptions.None)[0];
@@ -188,7 +176,6 @@ namespace VattenMedia.Infrastructure.Services
 
             if (string.IsNullOrWhiteSpace(code))
             {
-                // Something went wrong
                 return null;
             }
 
@@ -197,33 +184,31 @@ namespace VattenMedia.Infrastructure.Services
 
         private async Task<string> GetAuthIdFromCode(string code, string redirectUrl)
         {
-            string tokenRequestUrl = $"{tokenEndpoint}?code={code}&redirect_uri={redirectUrl}" +
+            var tokenRequestUrl = $"{tokenEndpoint}?code={code}&redirect_uri={redirectUrl}" +
                 $"&client_id={clientId}&code_verifier={code_verifier}&client_secret={clientSecret}&scope=&grant_type=authorization_code";
 
-            HttpWebRequest tokenRequest = (HttpWebRequest)WebRequest.Create(tokenRequestUrl);
+            var tokenRequest = (HttpWebRequest)WebRequest.Create(tokenRequestUrl);
             tokenRequest.Method = "POST";
             tokenRequest.ContentType = "application/x-www-form-urlencoded";
             tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            byte[] byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
+            var byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
             tokenRequest.ContentLength = byteVersion.Length;
-            using (System.IO.Stream stream = tokenRequest.GetRequestStream())
+            using (Stream stream = tokenRequest.GetRequestStream())
             {
                 await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             }
 
-            WebResponse tokenResponse = await tokenRequest.GetResponseAsync();
+            var tokenResponse = await tokenRequest.GetResponseAsync();
 
-            using (StreamReader reader = new StreamReader(tokenResponse.GetResponseStream()))
-            {
-                string responseText = await reader.ReadToEndAsync();
-                Dictionary<string, string> tokenEndpointDecoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
+            using StreamReader reader = new StreamReader(tokenResponse.GetResponseStream());
+            var responseText = await reader.ReadToEndAsync();
+            var tokenEndpointDecoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
 
-                string accessToken = tokenEndpointDecoded["access_token"];
-                string refreshToken = tokenEndpointDecoded["refresh_token"];
-                configHandler.SetYoutubeRefreshToken(refreshToken);
+            var accessToken = tokenEndpointDecoded["access_token"];
+            var refreshToken = tokenEndpointDecoded["refresh_token"];
+            configHandler.SetYoutubeRefreshToken(refreshToken);
 
-                return tokenEndpointDecoded["access_token"];
-            }
+            return tokenEndpointDecoded["access_token"];
         }
 
         private async Task<string> RefreshAccessToken()
@@ -233,52 +218,50 @@ namespace VattenMedia.Infrastructure.Services
                 return "";
             }
 
-            string refreshToken = configHandler.Config.YoutubeRefreshToken;
-            string tokenRequestUrl = $"{tokenEndpoint}?refresh_token={refreshToken}&client_id={clientId}&client_secret={clientSecret}&grant_type=refresh_token";
+            var refreshToken = configHandler.Config.YoutubeRefreshToken;
+            var tokenRequestUrl = $"{tokenEndpoint}?refresh_token={refreshToken}&client_id={clientId}&client_secret={clientSecret}&grant_type=refresh_token";
 
-            HttpWebRequest tokenRequest = (HttpWebRequest)WebRequest.Create(tokenRequestUrl);
+            var tokenRequest = (HttpWebRequest)WebRequest.Create(tokenRequestUrl);
             tokenRequest.Method = "POST";
             tokenRequest.ContentType = "application/x-www-form-urlencoded";
             tokenRequest.Accept = "Accept=text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
-            byte[] byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
+            var byteVersion = Encoding.ASCII.GetBytes(tokenRequestUrl);
             tokenRequest.ContentLength = byteVersion.Length;
             using (Stream stream = tokenRequest.GetRequestStream())
             {
                 await stream.WriteAsync(byteVersion, 0, byteVersion.Length);
             }
 
-            WebResponse tokenResponse = await tokenRequest.GetResponseAsync();
+            var tokenResponse = await tokenRequest.GetResponseAsync();
 
-            using (StreamReader reader = new StreamReader(tokenResponse.GetResponseStream()))
-            {
-                string responseText = await reader.ReadToEndAsync();
-                Dictionary<string, string> tokenEndpointDecoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
+            using StreamReader reader = new StreamReader(tokenResponse.GetResponseStream());
+            var responseText = await reader.ReadToEndAsync();
+            var tokenEndpointDecoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseText);
 
-                string accessToken = tokenEndpointDecoded["access_token"];
-                configHandler.SetYoutubeAccessToken(accessToken);
-                return accessToken;
-            }
+            var accessToken = tokenEndpointDecoded["access_token"];
+            configHandler.SetYoutubeAccessToken(accessToken);
+            return accessToken;
         }
 
         #region Crypto functions
         private static string RandomDataBase64url(uint length)
         {
-            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
-            byte[] bytes = new byte[length];
+            var rng = new RNGCryptoServiceProvider();
+            var bytes = new byte[length];
             rng.GetBytes(bytes);
             return Base64urlencodeNoPadding(bytes);
         }
 
         private static byte[] Sha256(string inputStirng)
         {
-            byte[] bytes = Encoding.ASCII.GetBytes(inputStirng);
-            SHA256Managed sha256 = new SHA256Managed();
+            var bytes = Encoding.ASCII.GetBytes(inputStirng);
+            var sha256 = new SHA256Managed();
             return sha256.ComputeHash(bytes);
         }
 
         private static string Base64urlencodeNoPadding(byte[] buffer)
         {
-            string base64 = Convert.ToBase64String(buffer);
+            var base64 = Convert.ToBase64String(buffer);
             base64 = base64.Replace("+", "-").Replace("/", "_").Replace("/", "_").Replace("=", "");
             return base64;
         }

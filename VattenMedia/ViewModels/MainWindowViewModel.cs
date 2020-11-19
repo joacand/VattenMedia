@@ -21,7 +21,7 @@ namespace VattenMedia.ViewModels
         private readonly IConfigHandler configHandler;
         private readonly ITwitchService twitchService;
         private readonly IYoutubeService youtubeService;
-        private readonly IStatusManager statusManager;
+        private readonly IStatusTextService statusManager;
         private readonly IStreamStarterService streamStarterService;
         private readonly AppConfiguration appConfiguration;
         private int runningProcesses;
@@ -56,7 +56,7 @@ namespace VattenMedia.ViewModels
             IConfigHandler configHandler,
             ITwitchService twitchService,
             IYoutubeService youtubeService,
-            IStatusManager statusManager,
+            IStatusTextService statusManager,
             IStreamStarterService streamStarterService,
             AppConfiguration appConfiguration)
         {

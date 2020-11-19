@@ -37,7 +37,7 @@ namespace VattenMedia.Infrastructure.Services
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", $"OAuth {oAuthId}");
 
-            var response = await client.ExecuteTaskAsync<TwitchStreamsRootResponse>(request);
+            var response = await client.ExecuteAsync<TwitchStreamsRootResponse>(request);
 
             return CreateChannels(response.Data);
         }
@@ -50,7 +50,7 @@ namespace VattenMedia.Infrastructure.Services
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", $"OAuth {oAuthId}");
 
-            var response = await client.ExecuteTaskAsync<TwitchVideosRootResponse>(request);
+            var response = await client.ExecuteAsync<TwitchVideosRootResponse>(request);
 
             return CreateVideos(response.Data);
         }
@@ -72,7 +72,7 @@ namespace VattenMedia.Infrastructure.Services
             request.AddHeader("Client-ID", clientId);
             request.AddHeader("Authorization", $"OAuth {oAuthId}");
 
-            var response = await client.ExecuteTaskAsync<TwitchChannelRootResponse>(request);
+            var response = await client.ExecuteAsync<TwitchChannelRootResponse>(request);
 
             return response.Data.users.Count > 0
                 ? response.Data.users.First()._id
