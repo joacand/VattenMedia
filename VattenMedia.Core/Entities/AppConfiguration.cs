@@ -7,5 +7,6 @@
         public string StreamUtilityRcPath { get; set; }
         public bool TwitchEnabled { get; set; }
         public bool YoutubeEnabled { get; set; }
+        public string StreamStarterOptionalCommandLineArguments { get; set; }
     }
 }

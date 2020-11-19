@@ -12,7 +12,7 @@ namespace VattenMedia.Infrastructure.Extensions
         {
             container.RegisterType<IConfigHandler, ConfigHandler>();
             container.RegisterType<IStreamStarterService, StreamStarterService>();
-            container.RegisterType<IStatusManager, StatusManager>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IStatusTextService, StatusTextService>(new ContainerControlledLifetimeManager());
             container.RegisterType<ITwitchService, TwitchService>();
             container.RegisterType<IYoutubeService, YoutubeService>();
             container.RegisterType<ITwitchChatClientFactory, TwitchChatClientFactory>();

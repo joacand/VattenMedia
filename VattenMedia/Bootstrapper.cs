@@ -24,7 +24,8 @@ namespace VattenMedia
                 StreamUtilityRcPath = ConfigurationManager.AppSettings["StreamUtilityRcPath"],
                 TwitchApiUrl = ConfigurationManager.AppSettings["TwitchApiUrl"],
                 TwitchEnabled = bool.Parse(ConfigurationManager.AppSettings["TwitchEnabled"]),
-                YoutubeEnabled = bool.Parse(ConfigurationManager.AppSettings["YoutubeEnabled"])
+                YoutubeEnabled = bool.Parse(ConfigurationManager.AppSettings["YoutubeEnabled"]),
+                StreamStarterOptionalCommandLineArguments = ConfigurationManager.AppSettings["StreamStarterOptionalCommandLineArguments"]
             };
         }
     }

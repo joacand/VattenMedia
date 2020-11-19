@@ -1,10 +1,9 @@
-﻿using System.IO;
-using System.Xml;
-using System.Xml.Serialization;
+﻿using Newtonsoft.Json;
+using System.IO;
 using VattenMedia.Core.Entities;
 using VattenMedia.Core.Interfaces;
 
-namespace VattenMedia.Infrastructure
+namespace VattenMedia.Infrastructure.Services
 {
     internal class ConfigHandler : IConfigHandler
     {
@@ -12,8 +11,6 @@ namespace VattenMedia.Infrastructure
         public bool HasYoutubeAccessToken => !string.IsNullOrWhiteSpace(Config.YoutubeToken);
         public bool HasYoutubeRefreshToken => !string.IsNullOrWhiteSpace(Config.YoutubeRefreshToken);
         public Config Config { get; private set; }
-
-        private static readonly string configPath = "VattenMediaConfig.xml";
 
         public ConfigHandler()
         {
@@ -44,26 +41,22 @@ namespace VattenMedia.Infrastructure
 
         public bool ReadFromFile()
         {
-            if (!File.Exists(configPath))
+            if (!File.Exists(Constants.ConfigPath))
             {
                 return false;
             }
-            var serializer = new XmlSerializer(typeof(Config));
-            using (var reader = XmlReader.Create(configPath))
-            {
-                Config = (Config)serializer.Deserialize(reader);
-            }
+            Config = JsonConvert.DeserializeObject<Config>(File.ReadAllText(Constants.ConfigPath));
             return true;
         }
 
         public void SaveToFile()
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Config));
-
-            using (StreamWriter writer = new StreamWriter(configPath))
+            using var writer = new StreamWriter(Constants.ConfigPath);
+            var serializer = new JsonSerializer
             {
-                serializer.Serialize(writer, Config);
-            }
+                Formatting = Formatting.Indented
+            };
+            serializer.Serialize(writer, Config);
         }
 
         public ViewType GetViewType()
