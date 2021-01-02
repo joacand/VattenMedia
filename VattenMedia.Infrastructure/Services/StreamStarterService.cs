@@ -10,13 +10,18 @@ namespace VattenMedia.Infrastructure.Services
     {
         private readonly AppConfiguration appConfiguration;
         private readonly IStatusTextService statusManager;
+        private readonly ILogger logger;
         private int runningProcesses;
 
         public event EventHandler<int> RunningProcessesChanged;
 
-        public StreamStarterService(IStatusTextService statusManager, AppConfiguration appConfiguration)
+        public StreamStarterService(
+            IStatusTextService statusManager,
+            ILogger logger,
+            AppConfiguration appConfiguration)
         {
             this.statusManager = statusManager;
+            this.logger = logger;
             this.appConfiguration = appConfiguration;
         }
 
@@ -61,7 +66,7 @@ namespace VattenMedia.Infrastructure.Services
 
             processTemp.Exited += ProcessTemp_Exited;
             processTemp.OutputDataReceived += ProcessTemp_DataReceived;
-            processTemp.ErrorDataReceived += ProcessTemp_DataReceived;
+            processTemp.ErrorDataReceived += ProcessTemp_DataReceivedError;
 
             try
             {
@@ -72,7 +77,9 @@ namespace VattenMedia.Infrastructure.Services
             }
             catch (Exception e)
             {
-                statusManager.ChangeStatusText($"Error: Could not start process. Exception: {e}");
+                var errorMessage = $"Error: Could not start process. Exception: {e}";
+                statusManager.ChangeStatusText(errorMessage);
+                logger.LogError(errorMessage);
             }
         }
 
@@ -91,6 +98,12 @@ namespace VattenMedia.Infrastructure.Services
         private void ProcessTemp_DataReceived(object sender, DataReceivedEventArgs e)
         {
             statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(2));
+        }
+
+        private void ProcessTemp_DataReceivedError(object sender, DataReceivedEventArgs e)
+        {
+            statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(10));
+            logger.LogError(e.Data);
         }
     }
 }

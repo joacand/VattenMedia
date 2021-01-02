@@ -23,6 +23,7 @@ namespace VattenMedia.ViewModels
         private readonly IYoutubeService youtubeService;
         private readonly IStatusTextService statusManager;
         private readonly IStreamStarterService streamStarterService;
+        private readonly ILogger logger;
         private readonly AppConfiguration appConfiguration;
         private int runningProcesses;
         private Timer statusTextTimer;
@@ -58,6 +59,7 @@ namespace VattenMedia.ViewModels
             IYoutubeService youtubeService,
             IStatusTextService statusManager,
             IStreamStarterService streamStarterService,
+            ILogger logger,
             AppConfiguration appConfiguration)
         {
             this.viewModelFactory = viewModelFactory;
@@ -67,6 +69,7 @@ namespace VattenMedia.ViewModels
             this.statusManager = statusManager;
             statusManager.SetCallback(ChangeStatusText);
             this.streamStarterService = streamStarterService;
+            this.logger = logger;
             this.appConfiguration = appConfiguration;
             streamStarterService.RunningProcessesChanged +=
                 (s, e) => { RunningProcessesChangedHandler(e); };
@@ -110,8 +113,13 @@ namespace VattenMedia.ViewModels
             }
         }
 
-        private void ChangeStatusText(string status, TimeSpan? time = null)
+        private void ChangeStatusText(string status, TimeSpan? time = null, bool isError = false)
         {
+            if (isError)
+            {
+                logger.LogError(status);
+            }
+
             if (statusTextTimer != null && statusTextTimer.Enabled && time != null)
             {
                 statusTextTimer.Stop();
@@ -145,7 +153,9 @@ namespace VattenMedia.ViewModels
             }
             catch (Exception e)
             {
-                statusManager.ChangeStatusText($"Error: Failed to get videos from Twitch. Exception: {e}");
+                var errorMessage = $"Error: Failed to get videos from Twitch. Exception: {e}";
+                statusManager.ChangeStatusText(errorMessage);
+                logger.LogError(errorMessage);
             }
             ChangeToVideoListView();
         }
@@ -177,7 +187,9 @@ namespace VattenMedia.ViewModels
             }
             catch (Exception e)
             {
-                statusManager.ChangeStatusText($"Error: Failed to get live channels from Twitch. Exception: {e}");
+                var errorMessage = $"Error: Failed to get live channels from Twitch. Exception: {e}";
+                statusManager.ChangeStatusText(errorMessage);
+                logger.LogError(errorMessage);
             }
         }
 
@@ -189,7 +201,7 @@ namespace VattenMedia.ViewModels
             }
             catch (Exception ex)
             {
-                ChangeStatusText($"Failed to launch stream - {ex}");
+                ChangeStatusText($"Failed to launch stream - {ex}", isError: true);
             }
         }
 
@@ -205,7 +217,7 @@ namespace VattenMedia.ViewModels
             }
             catch (Exception ex)
             {
-                ChangeStatusText($"Failed to launch from URL - {ex}");
+                ChangeStatusText($"Failed to launch from URL - {ex}", isError: true);
             }
         }
 
@@ -213,7 +225,7 @@ namespace VattenMedia.ViewModels
         {
             if (string.IsNullOrEmpty(configHandler.Config.TwitchClientId))
             {
-                ChangeStatusText("Client id missing - cannot authenticate");
+                ChangeStatusText("Client id missing - cannot authenticate", isError: true);
             }
             else
             {
@@ -281,12 +293,12 @@ namespace VattenMedia.ViewModels
         {
             if (string.IsNullOrEmpty(configHandler.Config.TwitchAccessToken))
             {
-                ChangeStatusText("Access token missing - cannot open chat");
+                ChangeStatusText("Access token missing - cannot open chat", isError: true);
                 return;
             }
             if (string.IsNullOrEmpty(configHandler.Config.TwitchUsername))
             {
-                ChangeStatusText("Username is missing - cannot open chat");
+                ChangeStatusText("Username is missing - cannot open chat", isError: true);
                 return;
             }
             var chatWindow = new ChatView { DataContext = viewModelFactory.CreateChatViewModel() };

@@ -5,20 +5,20 @@ namespace VattenMedia.Infrastructure.Services
 {
     internal class StatusTextService : IStatusTextService
     {
-        private Action<string, TimeSpan?> changeStatus;
+        private Action<string, TimeSpan?, bool> changeStatus;
 
         public StatusTextService()
         {
         }
 
-        public void SetCallback(Action<string, TimeSpan?> changeStatus)
+        public void SetCallback(Action<string, TimeSpan?, bool> changeStatus)
         {
-             this.changeStatus = changeStatus;
+            this.changeStatus = changeStatus;
         }
 
-        public void ChangeStatusText(string status, TimeSpan? time = null)
+        public void ChangeStatusText(string status, TimeSpan? time = null, bool isError = false)
         {
-            changeStatus(status, time);
+            changeStatus(status, time, isError);
         }
     }
 }
