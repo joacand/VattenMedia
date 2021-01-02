@@ -7,7 +7,7 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Description>A desktop client for watching Twitch streams using a third party streaming utility</Description>
     <Company>Joacand</Company>
-    <Copyright>Copyright 2020</Copyright>
+    <Copyright>Copyright 2021</Copyright>
     <Authors>Joacand</Authors>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <Version>4.0.0</Version>
