@@ -97,13 +97,19 @@ namespace VattenMedia.Infrastructure.Services
 
         private void ProcessTemp_DataReceived(object sender, DataReceivedEventArgs e)
         {
-            statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(2));
+            if (e?.Data != null)
+            {
+                statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(2));
+            }
         }
 
         private void ProcessTemp_DataReceivedError(object sender, DataReceivedEventArgs e)
         {
-            statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(10));
-            logger.LogError(e.Data);
+            if (e?.Data != null)
+            {
+                statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(10));
+                logger.LogError(e.Data);
+            }
         }
     }
 }
