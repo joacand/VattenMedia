@@ -19,8 +19,8 @@ player="C:\Program Files\VideoLAN\VLC\vlc.exe"
 #player="C:\Program Files\VideoLAN\VLC\vlc.exe" --file-caching=5000
 
 # MPC-HC, must be at least version 1.7 to be used
-player="C:\Program Files (x86)\MPC-HC\mpc-hc.exe"
-player="C:\Program Files\MPC-HC\mpc-hc64.exe"
+#player="C:\Program Files (x86)\MPC-HC\mpc-hc.exe"
+#player="C:\Program Files\MPC-HC\mpc-hc64.exe"
 # MPlayer2
 #player=C:\mplayer2\mplayer2.exe -cache 4096
 
@@ -55,8 +55,13 @@ player="C:\Program Files\MPC-HC\mpc-hc64.exe"
 #loglevel=debug
 
 # Number of threads to use when streaming HLS streams
-#hls-segment-threads=1
+hls-segment-threads=4
 
 # Number of threads to use when streaming HDS streams
 #hds-segment-threads=1
 
+# FFMPEG is used to mux separate video and audio streams in to a single
+# stream so that they can be played. The full or relative path to ffmpeg
+# or avconv should be specified here.
+#ffmpeg-ffmpeg=C:\Program Files (x86)\Streamlink\ffmpeg\ffmpeg.exe
+ffmpeg-ffmpeg=C:\Program Files (x86)\Streamlink\ffmpeg\ffmpeg.exe

@@ -41,7 +41,7 @@ namespace VattenMedia.Infrastructure.Services
         {
             if (url.ToString().ToUpperInvariant().Contains("/VIDEOS/"))
             {
-                args += " --player-passthrough=hls --hls-segment-threads 4";
+                args += " --player-passthrough=hls --stream-segment-threads 4";
             }
             return args;
         }
@@ -97,13 +97,19 @@ namespace VattenMedia.Infrastructure.Services
 
         private void ProcessTemp_DataReceived(object sender, DataReceivedEventArgs e)
         {
-            statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(2));
+            if (e?.Data != null)
+            {
+                statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(2));
+            }
         }
 
         private void ProcessTemp_DataReceivedError(object sender, DataReceivedEventArgs e)
         {
-            statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(10));
-            logger.LogError(e.Data);
+            if (e?.Data != null)
+            {
+                statusManager.ChangeStatusText(e.Data, TimeSpan.FromSeconds(10));
+                logger.LogError(e.Data);
+            }
         }
     }
 }

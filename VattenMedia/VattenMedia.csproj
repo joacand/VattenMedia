@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5-windows</TargetFramework>
+    <TargetFramework>net6-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Description>A desktop client for watching Twitch streams using a third party streaming utility</Description>
@@ -19,10 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestSharp" Version="106.12.0" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
-    <PackageReference Include="Unity" Version="5.11.7" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+    <PackageReference Include="Unity" Version="5.11.10" />
   </ItemGroup>
 
   <ItemGroup>
