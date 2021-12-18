@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         mc:Ignorable="d"
         Title="OAuth authentication" Height="450" Width="800">
     <Grid>
@@ -11,6 +12,6 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Content="This window will close when OAuth is complete"></Label>
-        <WebBrowser Grid.Row="1" Name="OAuthWebBrowser"></WebBrowser>
+        <wv2:WebView2 Grid.Row="1" Name="OAuthWebBrowser" Source="https://localhost"/>
     </Grid>
 </Window>
