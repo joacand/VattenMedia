@@ -20,11 +20,11 @@ namespace VattenMedia.Views
             this.streamingService = streamingService ?? throw new ArgumentNullException(nameof(streamingService));
             this.configHandler = configHandler ?? throw new ArgumentNullException(nameof(configHandler));
 
-            OAuthWebBrowser.Navigate(streamingService.OAuthUrl);
-            OAuthWebBrowser.Navigated += OAuthWebBrowser_Navigated;
+            OAuthWebBrowser.Source = new Uri(streamingService.OAuthUrl);
+            OAuthWebBrowser.NavigationStarting += OAuthWebBrowser_NavigationStarting;
         }
 
-        private void OAuthWebBrowser_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        private void OAuthWebBrowser_NavigationStarting(object sender, Microsoft.Web.WebView2.Core.CoreWebView2NavigationStartingEventArgs e)
         {
             string url = e.Uri.ToString();
             Navigating(url);
