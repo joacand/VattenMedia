@@ -166,7 +166,7 @@ namespace VattenMedia.Infrastructure.Services
             return liveChannels;
         }
 
-        public async Task<string> GetAuthIdFromUrl(string url)
+        public async Task<AuthDetails> GetAuthIdFromUrl(string url)
         {
             var code = string.Empty;
             if (url.Contains("code="))
@@ -182,7 +182,7 @@ namespace VattenMedia.Infrastructure.Services
             return await GetAuthIdFromCode(code, redirectUrl);
         }
 
-        private async Task<string> GetAuthIdFromCode(string code, string redirectUrl)
+        private async Task<AuthDetails> GetAuthIdFromCode(string code, string redirectUrl)
         {
             var tokenRequestUrl = $"{tokenEndpoint}?code={code}&redirect_uri={redirectUrl}" +
                 $"&client_id={clientId}&code_verifier={code_verifier}&client_secret={clientSecret}&scope=&grant_type=authorization_code";
@@ -208,7 +208,7 @@ namespace VattenMedia.Infrastructure.Services
             var refreshToken = tokenEndpointDecoded["refresh_token"];
             configHandler.SetYoutubeRefreshToken(refreshToken);
 
-            return tokenEndpointDecoded["access_token"];
+            return new AuthDetails { AccessToken = tokenEndpointDecoded["access_token"] };
         }
 
         private async Task<string> RefreshAccessToken()

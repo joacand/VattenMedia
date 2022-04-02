@@ -21,9 +21,10 @@ namespace VattenMedia.Infrastructure.Services
             }
         }
 
-        public void SetTwitchAccessToken(string accessToken)
+        public void SetTwitchAuthDetails(AuthDetails authDetails)
         {
-            Config.TwitchAccessToken = accessToken;
+            Config.TwitchAccessToken = authDetails.AccessToken;
+            Config.TwitchIdToken = authDetails.IdToken;
             SaveToFile();
         }
 
