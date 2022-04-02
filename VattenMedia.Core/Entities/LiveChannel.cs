@@ -21,7 +21,7 @@ namespace VattenMedia.Core.Entities
             Viewers = viewers;
             RunTime = runTime;
             BitmapUrl = string.IsNullOrWhiteSpace(bitmapUrl) ? null : new Uri(bitmapUrl);
-            Url = string.IsNullOrWhiteSpace(url) ? null : new Uri(url);
+            Url = new Uri(url);
             ChannelId = channelId;
         }
 

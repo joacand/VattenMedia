@@ -37,8 +37,8 @@ namespace VattenMedia.Views
             {
                 return;
             }
-            var authId = await streamingService.GetAuthIdFromUrl(url);
-            configHandler.SetTwitchAccessToken(authId);
+            var authDetails = await streamingService.GetAuthIdFromUrl(url);
+            configHandler.SetTwitchAuthDetails(authDetails);
             Close();
         }
     }

@@ -7,8 +7,10 @@ namespace VattenMedia.Core.Entities
     public class Config
     {
         public string TwitchAccessToken { get; set; } = string.Empty;
+        public string TwitchIdToken { get; set; } = string.Empty;
         public string TwitchClientId { get; set; } = string.Empty;
         public string TwitchUsername { get; set; } = string.Empty;
+        public string TwitchUserId { get; set; } = string.Empty;
 
         public string YoutubeChannelId { get; set; } = string.Empty;
         public string YoutubeApiKey { get; set; } = string.Empty;

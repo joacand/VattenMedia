@@ -8,7 +8,7 @@ namespace VattenMedia.Core.Interfaces
         bool HasYoutubeAccessToken { get; }
         bool HasYoutubeRefreshToken { get; }
         Config Config { get; }
-        void SetTwitchAccessToken(string accessToken);
+        void SetTwitchAuthDetails(AuthDetails authDetails);
         void SetYoutubeAccessToken(string accessToken);
         void SetYoutubeRefreshToken(string refreshToken);
         bool ReadFromFile();
