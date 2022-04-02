@@ -7,10 +7,10 @@
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <Description>A desktop client for watching Twitch streams using a third party streaming utility</Description>
     <Company>Joacand</Company>
-    <Copyright>Copyright 2021</Copyright>
+    <Copyright>Copyright 2022</Copyright>
     <Authors>Joacand</Authors>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <Version>5.0.0</Version>
+    <AssemblyVersion>5.1.0.0</AssemblyVersion>
+    <Version>5.1.0</Version>
     <ApplicationIcon>vattenmedia8.ico</ApplicationIcon>
   </PropertyGroup>
 
