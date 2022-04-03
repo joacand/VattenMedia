@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
-using System.Net;
-using System.Windows.Media.Imaging;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Net;
+using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace VattenMedia.Models
 {
-    internal class LiveChannel
+    internal class LiveChannel : INotifyPropertyChanged
     {
         public string Name { get; }
         public string Title { get; }
@@ -40,12 +43,18 @@ namespace VattenMedia.Models
             RunTime = runTime;
             BitmapUrl = CreateBitmapUrl(bitmapUrl);
             Url = url;
-            Image = GetImage();
             ChannelId = channelId;
             IsFavorited = isFavorited;
         }
 
-        private Uri CreateBitmapUrl(string bitmapUrl)
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private static Uri CreateBitmapUrl(string bitmapUrl)
         {
             if (string.IsNullOrWhiteSpace(bitmapUrl)) { return null; }
             bitmapUrl = bitmapUrl.Replace("{width}", "400").Replace("{height}", "300");
@@ -64,6 +73,16 @@ namespace VattenMedia.Models
                   isFavorited)
         { }
 
+        public void LoadImage()
+        {
+            var image = GetImage();
+            image.Freeze(); // To allow application current dispatcher to use object created in a different thread
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                Image = image;
+            });
+        }
+
         private BitmapImage GetImage()
         {
             var myRequest = (HttpWebRequest)WebRequest.Create(BitmapUrl);
@@ -74,18 +93,16 @@ namespace VattenMedia.Models
                 bitmap = new Bitmap(myResponse.GetResponseStream());
             }
 
-            using (MemoryStream memory = new MemoryStream())
-            {
-                bitmap.Save(memory, ImageFormat.Bmp);
-                bitmap.Dispose();
-                memory.Position = 0;
-                var bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
-                return bitmapimage;
-            }
+            using MemoryStream memory = new MemoryStream();
+            bitmap.Save(memory, ImageFormat.Bmp);
+            bitmap.Dispose();
+            memory.Position = 0;
+            var bitmapimage = new BitmapImage();
+            bitmapimage.BeginInit();
+            bitmapimage.StreamSource = memory;
+            bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapimage.EndInit();
+            return bitmapimage;
         }
 
         public override string ToString()

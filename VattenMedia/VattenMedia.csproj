@@ -12,6 +12,7 @@
     <AssemblyVersion>5.1.0.0</AssemblyVersion>
     <Version>5.1.0</Version>
     <ApplicationIcon>vattenmedia8.ico</ApplicationIcon>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
