@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -182,7 +183,13 @@ namespace VattenMedia.ViewModels
                     .OrderByDescending(x => configHandler.IsFavorited(x.Name))
                     .ThenByDescending(x => x.Viewers))
                 {
-                    LiveChannels.Add(new LiveChannel(channel, configHandler.IsFavorited(channel.Name)));
+                    var liveChannel = new LiveChannel(channel, configHandler.IsFavorited(channel.Name));
+                    LiveChannels.Add(liveChannel);
+                    _ = Task.Run(() =>
+                    {
+                        liveChannel.LoadImage();
+                        liveChannel.OnPropertyChanged(nameof(liveChannel.Image));
+                    });
                 }
             }
             catch (Exception e)
